@@ -1,0 +1,3 @@
+﻿"Magnet thickness"= 1.57mm
+"Magnet short side"= 9.08mm
+"Magnet long side"= 19.14mm

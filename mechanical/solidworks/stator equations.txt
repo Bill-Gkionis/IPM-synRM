@@ -1,0 +1,6 @@
+﻿"Inner diameter"= 91.6mm
+"Slots"= 36
+"Stator OD"= 128mm
+"Slot width"= 2deg
+"Slot depth"= 10mm
+"Slot opening"= 3mm
