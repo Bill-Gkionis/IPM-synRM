@@ -1,243 +1,116 @@
-🧲 Custom Interior Permanent Magnet (IPM) Motor
-
+# 🧲 Custom Interior Permanent Magnet (IPM) Motor  
 Electromagnetic Design • FEA Analysis • Dynamic Modeling • FOC Simulation
 
-📌 Project Overview
+---
+
+## 📌 Project Overview
 
 This project focuses on the design and modeling of a custom Interior Permanent Magnet (IPM) synchronous motor intended for high torque density actuator applications.
 
 The objective is to:
 
-Design rotor and stator electromagnetic geometry
+- Design rotor and stator electromagnetic geometry
+- Perform 2D finite element analysis (FEA)
+- Extract machine parameters (Ld, Lq, flux linkage)
+- Develop a dynamic dq-axis motor model
+- Simulate Field-Oriented Control (FOC)
+- Evaluate torque-speed performance
+- Structure the model for multi-objective optimization
 
-Perform 2D finite element analysis (FEA)
-
-Extract machine parameters (Ld, Lq, flux linkage)
-
-Develop a dynamic dq-axis motor model
-
-Simulate Field-Oriented Control (FOC)
-
-Evaluate torque-speed performance
-
-Structure the model for multi-objective optimization
-
-The workflow integrates:
+Workflow integration:
 
 SolidWorks → FEMM → MATLAB/Simulink (Simscape Electrical)
 
-🧩 1. Electromagnetic Geometry Design
-Stator
+---
 
-36-slot distributed winding configuration
+## 🧩 Electromagnetic Geometry
 
-Outer diameter: 128 mm
+### Stator
+- 36-slot distributed winding
+- Outer diameter: 128 mm
+- Inner diameter: 91.6 mm
+- Slot geometry optimized for flux guidance
 
-Inner diameter: 91.6 mm
+### Rotor
+- 8-pole IPM topology
+- V-shaped interior magnets
+- Saliency for increased Ld/Lq ratio
 
-Slot geometry optimized for manufacturability and flux guidance
+---
 
-(Insert stator CAD image here)
+## ⚡ Finite Element Analysis (FEMM)
 
-Rotor
+- 2D magnetostatic simulation
+- Material: M-19 Steel
+- Magnets: N45
+- ~91,000 nodes
+- ~182,000 elements
 
-8-pole IPM topology
+### Flux Density Observations
+- Peak flux density ≈ 1.3 T in stator teeth
+- No severe back iron saturation under nominal excitation
 
-V-shaped interior magnets
+---
 
-Saliency introduced to increase Ld/Lq ratio
+## 📊 Parameter Extraction (In Progress)
 
-Designed for reluctance + PM torque contribution
+Machine parameters extracted from FEM results:
 
-(Insert rotor CAD image here)
+- d-axis inductance (Ld)
+- q-axis inductance (Lq)
+- Flux linkage (ψf)
 
-⚡ 2. Finite Element Analysis (FEMM)
+Integrated into dynamic performance model.
 
-2D magnetostatic simulations performed using FEMM:
+---
 
-Material: M-19 Steel (stator/rotor)
+## 🔁 Dynamic Modeling (MATLAB / Simulink)
 
-Neodymium permanent magnets (N45)
+dq-axis formulation:
 
-Air-gap field distribution analysis
+Vd = R·Id − ωe·Lq·Iq  
+Vq = R·Iq + ωe·(Ld·Id + ψf)
 
-Flux density mapping
+Implemented using:
+- MATLAB/Simulink
+- Simscape Electrical (high-fidelity PMSM block)
 
-Saturation evaluation
+---
 
-Mesh:
-
-~91,000 nodes
-
-~182,000 elements
-
-Flux Density Distribution
-
-(Insert FEM flux density plot here)
-
-Observations:
-
-Peak flux density ~1.3 T in stator teeth
-
-Proper flux guidance through rotor saliency bridges
-
-No severe saturation in back iron (under nominal excitation)
-
-📊 3. Parameter Extraction (In Progress)
-
-Machine parameters are being extracted from FEM results:
-
-d-axis inductance (Ld)
-
-q-axis inductance (Lq)
-
-Flux linkage (ψf)
-
-Electromagnetic torque estimation
-
-These parameters are integrated into a dynamic motor model for performance evaluation.
-
-🔁 4. Dynamic Modeling (MATLAB / Simulink)
-
-The motor is modeled in dq reference frame using:
-
-𝑉
-𝑑
-=
-𝑅
-𝐼
-𝑑
-−
-𝜔
-𝑒
-𝐿
-𝑞
-𝐼
-𝑞
-V
-d
-	​
-
-=RI
-d
-	​
-
-−ω
-e
-	​
-
-L
-q
-	​
-
-I
-q
-	​
-
-𝑉
-𝑞
-=
-𝑅
-𝐼
-𝑞
-+
-𝜔
-𝑒
-(
-𝐿
-𝑑
-𝐼
-𝑑
-+
-𝜓
-𝑓
-)
-V
-q
-	​
-
-=RI
-q
-	​
-
-+ω
-e
-	​
-
-(L
-d
-	​
-
-I
-d
-	​
-
-+ψ
-f
-	​
-
-)
-
-Implemented in:
-
-MATLAB/Simulink
-
-Simscape Electrical (high-fidelity PMSM block)
-
-Control Structure
-
-Field-Oriented Control (FOC)
-
-Closed-loop current regulation
-
-Torque-speed simulation
-
-(Insert Simulink model screenshot here)
-
-📈 5. Performance Analysis
+## 📈 Performance Analysis
 
 Simulated:
+- Torque-speed characteristics
+- Efficiency trade-offs
+- Closed-loop FOC current response
 
-Torque-speed characteristics
+Model structured for:
+- Multi-objective optimization
+- Torque density improvement
+- Loss minimization
 
-Efficiency trade-offs
+---
 
-Current response under FOC
+## 🏗 Mechanical Integration
 
-Sensitivity to parameter variation
+- Rotor inertia estimation from CAD geometry
+- Prepared for integration into dynamic model
 
-The model is structured for future:
+---
 
-Multi-objective optimization
+## 🛠 Tools Used
 
-Torque density improvement
+- SolidWorks
+- FEMM
+- MATLAB / Simulink
+- Simscape Electrical
+- LTspice
 
-Loss minimization
+---
 
-🏗 6. Mechanical Integration
+## 🚀 Next Steps
 
-Rotor inertia estimation from CAD geometry
-
-Parameter prepared for integration into dynamic model
-
-🚀 Next Development Steps
-
-Automate FEM-to-MATLAB parameter extraction workflow
-
-Improve model validation accuracy
-
-Add thermal modeling
-
-Implement optimization routine (multi-criteria)
-
-🛠 Tools Used
-
-SolidWorks (geometry design)
-
-FEMM (2D electromagnetic FEA)
-
-MATLAB / Simulink
-
-Simscape Electrical
-
-LTspice (power electronics validation)
+- Automate FEM-to-MATLAB parameter extraction
+- Improve model validation accuracy
+- Add thermal modeling
+- Implement optimization routine
