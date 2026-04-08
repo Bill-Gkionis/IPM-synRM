@@ -113,4 +113,7 @@ Model structured for:
 - Automate FEM-to-MATLAB parameter extraction
 - Improve model validation accuracy
 - Add thermal modeling
+- Extend loss modeling to include proximity effect and hysteresis losses
+- Incorporate core saturation effects into the electromagnetic model
+- Analyze slot harmonics and higher-order field harmonics impact on performance
 - Implement optimization routine
