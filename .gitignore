@@ -1,0 +1,18 @@
+# Results that FEMM and the scripts regenerate: never committed (Repo Restructure §9)
+*.ans
+out/
+runs/
+
+# Simulink and MATLAB caches and autosaves
+slprj/
+*.slxc
+*.asv
+*.autosave
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Not *.fem: on Windows that pattern would also hide femm/*.FEM

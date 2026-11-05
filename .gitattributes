@@ -1,0 +1,25 @@
+# Line endings (2026-11-05). Every text file is stored and checked out with LF, so git never
+# warns "LF will be replaced by CRLF". FEMM's model files are kept byte for byte, as FEMM wrote them.
+* text=auto eol=lf
+*.FEM -text
+*.fem -text
+*.ans -text
+
+# Binary: never converted and never diffed.
+*.png binary
+*.jpg binary
+*.gif binary
+*.mp4 binary
+*.pdf binary
+*.mat binary
+*.mlx binary
+*.slx binary
+*.slxc binary
+*.SLDPRT binary
+*.SLDASM binary
+*.SLDDRW binary
+*.step binary
+*.stp binary
+*.dwg binary
+*.dxf -text
+*.DXF -text
