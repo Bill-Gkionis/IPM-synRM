@@ -9,10 +9,10 @@ air band behind the magnets. femfile.py reads them without FEMM. This script use
      note can say not only where the magnets work on average but how far down their weakest spots go.
 
 Run from the Python to FEMM folder, after barrier_study.py has written out/barrier/fields/*.ans:
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figure out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figure out of the docs figures folder
     uv run python materials/fields.py
-Outputs: out/materials/fields.json and one figure (also copied into the folder MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+Outputs: out/materials/fields.json and one figure (also copied into the folder MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 """
 from __future__ import annotations
 

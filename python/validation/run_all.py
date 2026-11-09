@@ -24,7 +24,7 @@ How one step is run
     (sys.executable). That is what `uv run python` runs, without uv's start-up check, so uv cannot change the
     environment in the middle of a run. Steps run strictly one after the other. Each child gets this environment:
       FEMM_DIR           from femm_session.femm_dir(), so a terminal that predates FEMM 5.0 works too;
-      MOTOR_FIGURES_DIR  out\materials\figures, so the materials scripts keep their figures out of the notes' folder;
+      MOTOR_FIGURES_DIR  out\materials\figures, so the materials scripts keep their figures out of the repository's docs figures folder;
       PYTHONUNBUFFERED=1 so a step's log grows while it runs (watch it with Get-Content -Wait);
       PYTHONIOENCODING=utf-8 so the logs are UTF-8 whatever the console's code page is.
     The runner puts itself at below-normal priority first (femm_session.lower_priority()). Every child, and every
@@ -99,8 +99,8 @@ The order, and what each step needs
     Outside out\ they write: learn\ (tiny.dxf, magnet.fem, magnet.ans, out\: git ignores them), runs\ (evaluate's private
     files: an ordinary folder of Python to FEMM, which git ignores) and pages\Rotor Flux Explorer.html
     (flux_explorer_build), which git keeps as a binary file.
-    Nothing is written into the project notes. After a run, check that the notes' figures folder shows no change under git:
-      git -C "<project notes folder>" status --short -- "<figures folder>"
+    Nothing is written into the repository's docs figures folder. After a run, check that it shows no change under git:
+      git -C "<repository folder>" status --short -- docs/figures
 
 What each step proves
     The numbers are the README's, FEMM 5.0 ones where it has them. "x42" is the FEMM 4.2 time.

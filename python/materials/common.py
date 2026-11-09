@@ -14,9 +14,9 @@ holds the three things the scripts share:
 Run any script from the `Python to FEMM` folder (the one above this one), for example:
     uv run python materials/magnetic.py                   # the figures land in out/materials/ and nowhere else
     $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # (PowerShell) also copy every figure into that folder
-    $env:MOTOR_FIGURES_DIR = "vault"                      # also copy every figure into the notes' folder (config.toml, vault_figures)
-Unset or empty, nothing is copied into the notes' folder (the rule: no run writes into the project notes; figures are copied by hand). The word `vault` is
-the one way to have a run write there, on purpose, when the notes' figures are being regenerated. The numbers (JSON, CSV) always land in out/materials/.
+    $env:MOTOR_FIGURES_DIR = "docs"                       # also copy every figure into the repository's docs figures folder (config.toml, docs_figures)
+Unset or empty, nothing is copied into the docs figures folder (the rule: no run writes there; figures are copied by hand). The word `docs` is
+the one way to have a run write there, on purpose, when the repository's figures are being regenerated. The numbers (JSON, CSV) always land in out/materials/.
 """
 from __future__ import annotations
 
@@ -38,8 +38,8 @@ import paths  # noqa: E402  (config.toml: the one place that names this PC's fol
 
 OUT = PROC / "out" / "materials"                            # numbers (JSON, CSV) and figures land here
 OUT.mkdir(parents=True, exist_ok=True)
-FIGURES = paths.path("vault_figures")                       # the notes embed figures from here (save() copies them here only when MOTOR_FIGURES_DIR says `vault`)
-VAULT = "vault"                                             # the one word MOTOR_FIGURES_DIR may hold instead of a folder: "copy into FIGURES, the notes' folder"
+FIGURES = paths.path("docs_figures")                        # the repository's docs figures folder (save() copies figures here only when MOTOR_FIGURES_DIR says `docs`)
+DOCS = "docs"                                               # the one word MOTOR_FIGURES_DIR may hold instead of a folder: "copy into FIGURES, the repository's docs figures folder"
 REFERENCE_FEM = paths.path("reference_fem")                 # our reference model, the copy in P\reference (read_fem_blocks() reads it)
 MATLIB = paths.path("femm_matlib")                          # FEMM 5.0's material library (Air, N45 and the ASM "M-19" as in 4.2)
 M19_STEEL_FOLDER = "Soft Magnetic Materials / Silicon Iron"   # where FEMM 4.2's library kept the block "M-19 Steel"
@@ -173,21 +173,21 @@ def style():
 
 def figures_copy_destination() -> Path | None:
     """Where save() copies a figure besides out/materials/, or None: nowhere. The environment variable MOTOR_FIGURES_DIR decides, read each time:
-    unset or empty, None (a run writes nothing into the notes' folder); a folder, that folder; the word `vault` (in any case), FIGURES, the notes' folder.
-    A folder that is really called vault is written ./vault."""
+    unset or empty, None (a run writes nothing into the docs figures folder); a folder, that folder; the word `docs` (in any case), FIGURES, the repository's docs figures folder.
+    A folder that is really called docs is written ./docs."""
     asked = os.environ.get("MOTOR_FIGURES_DIR")
     if not asked:
         return None
-    return FIGURES if asked.strip().lower() == VAULT else Path(asked)
+    return FIGURES if asked.strip().lower() == DOCS else Path(asked)
 
 
 def save(fig, name: str):
     """Write a figure as PNG to out/materials/ and, only if asked, copy it to a second folder.
 
-    The copy is opt-in (the rule: no run writes into the project notes; figures are copied by hand). MOTOR_FIGURES_DIR unset or empty:
-    no copy. MOTOR_FIGURES_DIR a folder: the figure is copied there too, and the folder is made if it is missing. MOTOR_FIGURES_DIR=vault:
-    the copy goes to FIGURES, the notes' folder (config.toml, vault_figures). The variable is read here, each time, so it counts however
-    late it was set. Every figure of every materials script goes through this function: it is the only place that copies into the notes' folder.
+    The copy is opt-in (the rule: no run writes into the repository's docs figures folder; figures are copied by hand). MOTOR_FIGURES_DIR unset or empty:
+    no copy. MOTOR_FIGURES_DIR a folder: the figure is copied there too, and the folder is made if it is missing. MOTOR_FIGURES_DIR=docs:
+    the copy goes to FIGURES, the repository's docs figures folder (config.toml, docs_figures). The variable is read here, each time, so it counts however
+    late it was set. Every figure of every materials script goes through this function: it is the only place that copies into the docs figures folder.
 
     MOTOR_FIGURES_DIR may be the numbers' folder itself (out/materials): the figure is already there, so it is left
     alone. (Copying a file onto itself fails: on Windows with PermissionError, "being used by another process",

@@ -12,10 +12,10 @@ The note follows charge through the motor's materials, from one electron upwards
   H. the insulation                    -> no free electrons; breakdown; a void sees eps_r times the field
 
 Run from the Python to FEMM folder:
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the docs figures folder
     uv run python materials/current.py
-Outputs: out/materials/current.json and two figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+Outputs: out/materials/current.json and two figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 """
 from __future__ import annotations
 

@@ -6,10 +6,10 @@ FEMM model (the shaft is a boundary, the housing isn't drawn), so they're sketch
 labelled as such.
 
 Run from the Python to FEMM folder (motorgeo needs shapely, which is in this project's environment):
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figure out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figure out of the docs figures folder
     uv run python materials/crosssection.py
-Output: materials-cross-section.png (also copied into the folder MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+Output: materials-cross-section.png (also copied into the folder MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 """
 from __future__ import annotations
 

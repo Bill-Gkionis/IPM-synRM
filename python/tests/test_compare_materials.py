@@ -89,7 +89,7 @@ def two_folders(tmp_path):
 
 
 def test_two_folders_of_pictures_can_be_compared_on_their_own_when_asked(tmp_path, capsys):
-    """The report compares FEMM 5.0's 16 figures with the project notes' folder, which holds pictures and nothing else."""
+    """The report compares FEMM 5.0's 16 figures with the repository's docs figures folder, which holds pictures and nothing else."""
     old, new = two_folders(tmp_path)
     pixels = np.zeros((4, 4, 3), dtype=np.uint8)
     for name in ("a.png", "b.png"):

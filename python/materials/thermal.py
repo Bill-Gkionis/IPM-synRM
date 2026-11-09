@@ -9,10 +9,10 @@
   G. what heat does to the insulation     -> life halves every ~10 K (Arrhenius)
 
 Run from the Python to FEMM folder:
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the docs figures folder
     uv run python materials/thermal.py
-Outputs: out/materials/thermal.json and three figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+Outputs: out/materials/thermal.json and three figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 Values marked [CHECK report A/B] are being cross-checked online and may still change.
 """
 from __future__ import annotations

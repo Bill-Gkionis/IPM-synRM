@@ -119,10 +119,15 @@ def test_the_materials_steps_follow_build_md_and_the_learn_steps_run_in_learn():
         assert s.args[0].startswith(r"..\out\learn" + "\\")                   # and is inside P\out, never the project notes
 
 
-def test_no_argument_points_into_the_vault():
+def test_no_argument_points_into_the_docs_figures_folder():
+    """The runner keeps the materials figures out of the repository's docs figures folder (MOTOR_FIGURES_DIR is out/materials/figures), so no step
+    is handed that folder, or a path inside it, either. An argument counts as a path read from the step's own folder, and from P."""
+    docs = Path(os.path.normpath(paths.path("docs_figures")))
     for s in ra.STEPS:
-        for arg in s.args:
-            assert "Vault" not in arg, s.name
+        for base in (P / s.folder, P):
+            for arg in s.args:
+                target = Path(os.path.normpath(base / arg))
+                assert docs != target and docs not in target.parents, s.name
 
 
 def test_barrier_study_runs_before_reference_open_which_needs_its_folder():

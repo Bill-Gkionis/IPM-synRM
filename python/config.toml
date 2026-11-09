@@ -33,8 +33,8 @@ dxf_rotor           = 'reference\Rotor.DXF'                 # the rotor as the C
 dxf_rotor_with_band = 'reference\SynRM rotor.DXF'           # the rotor as the CAD last exported it (2026-01-22), byte for byte, read only: it has the air band (16 pockets beside the slots), removed in memory
 dxf_stator          = 'reference\Stator_refined.DXF'        # the stator as the CAD exported it (2026-01-13), byte for byte, read only
 femm_matlib   = 'D:\Apps\femm-qt\bin\matlib.dat'            # FEMM 5.0's material library
-vault_figures = '../docs/figures'   # where the notes embed figures from
-                                                            # (a run copies figures here only when asked, with MOTOR_FIGURES_DIR=vault; unset, nothing goes into the notes' folder)
+docs_figures  = '../docs/figures'                           # where the repository's figures live; '..' is the folder above this one, the repository's root
+                                                            # (a run copies figures here only when asked, with MOTOR_FIGURES_DIR=docs; unset, nothing is written into docs/figures)
 
 [femm]
 # How FEMM runs are made (read with paths.setting("femm", "workers")).

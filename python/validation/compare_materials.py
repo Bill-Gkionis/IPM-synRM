@@ -14,8 +14,8 @@ for example
 (femm42-out is FEMM 4.2's run of 2026-10-28: a checked copy of the `out` folder that it left in
 D:/dev/scripts/automation/proc/out. Its materials/ folder holds the numbers of the old run.)
 With --figures the two folders may hold nothing but pictures, so the figures can be compared on their own. That is how the
-report's comparison of FEMM 5.0's figures with the project notes' was made (the notes' folder is only read):
-    uv run python validation/compare_materials.py "<notes folder>/docs/figures" out/materials/figures --figures
+report's comparison of FEMM 5.0's figures with the repository's docs figures folder was made (that folder is only read):
+    uv run python validation/compare_materials.py "../docs/figures" out/materials/figures --figures
 and it prints, for each of the 16 pictures, "equal" or "N of M pixels differ" (report, section 2.9 and open question 3).
 
 Prints one line per file ("equal (123 values)", or each difference with its size) and then a total. A file that only

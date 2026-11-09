@@ -85,7 +85,7 @@ No script types a drive path: a script asks for a name, and `tests/test_paths.py
 ```
 [tools]   femm (FEMM 5.0's folder), ccx, cgx, gmsh, prepomax, elmer, elmergrid, matlab: the programs
 [paths]   out, rulings, femm42_out, reference_fem, simulink_plant, motor_structure_mat, dxf_rotor, dxf_rotor_with_band,
-          dxf_stator, femm_matlib, and the folder of the project notes' figures: folders and files
+          dxf_stator, femm_matlib, docs_figures (the repository's docs/figures): folders and files
 [femm]    workers = 8, priority = 'below_normal'
 ```
 
@@ -265,11 +265,11 @@ The bench tries each tool of the pipeline on the motor's own band-free geometry 
 
 ### 5. The materials
 
-These scripts compute the numbers and draw the figures about the motor's materials (M-19 steel, N45 magnets, copper, insulation and the structural parts) in four domains: magnetic, electrical current, thermal and structural. Every number is either computed in a script or read from a source named beside it in the code, and none of the scripts starts a solver; values the code marks `[CHECK ...]` are still being cross-checked online and may change. Each script saves its numbers (JSON, CSV) and its PNG figures in `out/materials/`; if the environment variable `MOTOR_FIGURES_DIR` names a folder, each figure is copied there too.
+These scripts compute the numbers and draw the figures about the motor's materials (M-19 steel, N45 magnets, copper, insulation and the structural parts) in four domains: magnetic, electrical current, thermal and structural. Every number is either computed in a script or read from a source named beside it in the code, and none of the scripts starts a solver; values the code marks `[CHECK ...]` are still being cross-checked online and may change. Each script saves its numbers (JSON, CSV) and its PNG figures in `out/materials/`; if the environment variable `MOTOR_FIGURES_DIR` names a folder, each figure is copied there too, and `MOTOR_FIGURES_DIR=docs` copies it into the repository's `docs/figures` folder (`docs_figures` in `config.toml`).
 
 | File | What it does, and how | Run | Result |
 |---|---|---|---|
-| `materials/common.py` | Shared by the other materials scripts: the physical constants (CODATA 2018), readers for the material blocks of the reference FEMM model (`reference/IPM synRM analysis.FEM`) and of FEMM 5.0's `matlib.dat`, one plot style, and `save()`, which writes each figure to `out/materials/` and copies it elsewhere only if `MOTOR_FIGURES_DIR` names a folder. | | |
+| `materials/common.py` | Shared by the other materials scripts: the physical constants (CODATA 2018), readers for the material blocks of the reference FEMM model (`reference/IPM synRM analysis.FEM`) and of FEMM 5.0's `matlib.dat`, one plot style, and `save()`, which writes each figure to `out/materials/` and copies it elsewhere only if `MOTOR_FIGURES_DIR` names a folder, or says `docs` for the repository's `docs/figures`. | | |
 | `materials/crosssection.py` | Draws the motor's cross-section coloured by material (36 slots, 8 poles, 128 mm across): [motorgeo.py](motorgeo.py) builds one 90-degree sector with every region tagged by material, and the script rotates it four times. The shaft and the housing are not in the FEMM model, so they are sketched and labelled as such. Writes `materials-cross-section.png`. | `uv run python materials/crosssection.py` | |
 | `materials/current.py` | Follows charge through the materials from one electron in copper upwards: conductivity, drift speed, resistance and loss, resistivity against temperature (the 234.5 rule, Matthiessen's rule), Nordheim's rule for silicon steel, skin depth, eddy currents in the laminations and the magnets, and the insulation. Saves `current.json` and its figures. | `uv run python materials/current.py` | Cutting a magnet into k pieces divides its eddy-current loss by k^2 while each piece stays under a skin depth (a scaling, not an absolute). |
 | `materials/fields.py` | Reads the solutions that [barrier_study.py](barrier_study.py) saved in `out/barrier/fields/` (90-degree sectors with and without the air band, at no load and at 10 A at the best angle) through [femfile.py](femfile.py), no FEMM needed. Draws flux lines over the materials and measures B along each magnet's own magnetisation direction, triangle by triangle. | `uv run python materials/fields.py`, after `barrier_study.py` | |

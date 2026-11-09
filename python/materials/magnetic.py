@@ -13,11 +13,11 @@ The note climbs one chain, and this script computes each step of it:
                                             and where our motor's magnets work
 
 Run from the Python to FEMM folder, after fields.py and current.py (this script reads their JSON):
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the docs figures folder
     uv run python materials/magnetic.py
 Outputs: out/materials/magnetic.json, magnetic_m19_curve.csv, and five figures (also copied into the folder
-MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 
 FEMM's library: section C reads FEMM 5.0's library (common.MATLIB) for the ASM "M-19" curve. FEMM 5.0 has no
 "M-19 Steel" any more, so that block is FEMM 4.2's, which motorgeo.M19_STEEL_FEMM42 keeps (common.m19_steel_block()).

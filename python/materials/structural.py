@@ -9,10 +9,10 @@
 
 Run from the Python to FEMM folder (F reads the rotor's geometry through motorgeo; shapely is in this project's
 environment, so a plain uv run is enough):
-    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the notes' folder
+    $env:MOTOR_FIGURES_DIR = "out/materials/figures"      # keeps the figures out of the docs figures folder
     uv run python materials/structural.py
-Outputs: out/materials/structural.json and two figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the notes' folder
-only if it says `vault`: see common.save()).
+Outputs: out/materials/structural.json and two figures (also copied into the folder MOTOR_FIGURES_DIR names, and into the repository's docs figures folder
+only if it says `docs`: see common.save()).
 """
 from __future__ import annotations
 

@@ -14,7 +14,7 @@ The file, config.toml
     quotes" the same text would start escape sequences, and the file would not load.
         [tools]   the programs: femm (FEMM 5.0's folder), ccx, cgx, gmsh, prepomax, elmer, elmergrid, matlab
         [paths]   folders and files: out, rulings, femm42_out, reference_fem, simulink_plant, motor_structure_mat, dxf_rotor,
-                  dxf_rotor_with_band, dxf_stator, femm_matlib, vault_figures
+                  dxf_rotor_with_band, dxf_stator, femm_matlib, docs_figures
         [femm]    settings of the FEMM runs: workers, priority
 
 The three calls (each takes an optional `config`, another file to read instead; the tests use it to try wrong ones)
@@ -30,7 +30,7 @@ The three calls (each takes an optional `config`, another file to read instead; 
 
 Who else decides
     femm_session.femm_dir() takes [tools] femm first, and FEMM_DIR (environment, then registry) only if the config names
-    no FEMM. MOTOR_FIGURES_DIR, if it is set, is still used instead of vault_figures (materials/common.save()).
+    no FEMM. MOTOR_FIGURES_DIR, if it is set, is still used instead of docs_figures (materials/common.save()).
 
 Run (from the Python to FEMM folder):
     uv run python paths.py [other_config.toml]

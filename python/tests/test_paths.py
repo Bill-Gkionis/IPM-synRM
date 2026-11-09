@@ -8,7 +8,7 @@ Four groups of tests:
      moved or deleted), and the values other scripts read from it.
   3. Who reads it. femm_session.femm_dir() takes [tools] femm first and FEMM_DIR only if the config names no FEMM (R4 of the
      tools plan). The scripts that read the reference model, and materials/common.py, take their paths from the config, and
-     MOTOR_FIGURES_DIR still wins over vault_figures.
+     MOTOR_FIGURES_DIR still wins over docs_figures.
   4. R5, the rule behind all of it: no script types a drive path of its own. The scan (drive_path_literals) is tried on a
      small source first, so that a scan which finds nothing is known to be able to find something ("Self-check").
 """
@@ -155,7 +155,7 @@ def test_configured_tools_exist():
 
 def test_the_other_files_the_config_names_are_there():
     assert paths.path("femm_matlib").is_file()
-    assert paths.path("vault_figures").is_dir()
+    assert paths.path("docs_figures").is_dir()
     assert paths.path("reference_fem").is_file()
     assert paths.path("femm42_out").is_dir()
 
@@ -202,17 +202,17 @@ def test_the_three_scripts_that_read_the_reference_model_read_the_configured_one
     assert load_fresh("common_under_test", P / "materials" / "common.py").REFERENCE_FEM == reference
 
 
-def test_the_materials_scripts_take_the_library_and_the_notes_folder_from_the_config():
+def test_the_materials_scripts_take_the_library_and_the_docs_figures_folder_from_the_config():
     cm = load_fresh("common_under_test", P / "materials" / "common.py")
     assert cm.MATLIB == paths.path("femm_matlib")
-    assert cm.FIGURES == paths.path("vault_figures")
+    assert cm.FIGURES == paths.path("docs_figures")
 
 
-def test_a_figure_is_copied_into_the_vault_only_when_asked(monkeypatch, tmp_path):
-    """138 of the final review. save() copies a figure to the folder MOTOR_FIGURES_DIR names, to the config's vault_figures if the variable says `vault`, and nowhere if it is
-    unset (the rule: no run writes into the project notes; figures are copied by hand). config.toml's vault_figures stays: it is the place used when asked.
+def test_a_figure_is_copied_into_the_docs_folder_only_when_asked(monkeypatch, tmp_path):
+    """138 of the final review. save() copies a figure to the folder MOTOR_FIGURES_DIR names, to the config's docs_figures if the variable says `docs`, and nowhere if it is
+    unset (the rule: no run writes into the repository's docs figures folder; figures are copied by hand). config.toml's docs_figures stays: it is the place used when asked.
 
-    The copy is replaced by a recorder, so that this test cannot write into the real notes' folder even if it fails."""
+    The copy is replaced by a recorder, so that this test cannot write a file into the real docs figures folder even if it fails."""
     cm = load_fresh("common_under_test", P / "materials" / "common.py")
     monkeypatch.setattr(cm, "OUT", tmp_path / "out")
     (tmp_path / "out").mkdir()
@@ -228,11 +228,11 @@ def test_a_figure_is_copied_into_the_vault_only_when_asked(monkeypatch, tmp_path
         cm.save(fig, "t.png")                                          # unset: no copy
         monkeypatch.setenv("MOTOR_FIGURES_DIR", "")
         cm.save(fig, "t.png")                                          # empty: no copy
-        monkeypatch.setenv("MOTOR_FIGURES_DIR", "vault")
-        cm.save(fig, "t.png")                                          # asked for: the config's vault_figures
+        monkeypatch.setenv("MOTOR_FIGURES_DIR", "docs")
+        cm.save(fig, "t.png")                                          # asked for: the config's docs_figures
     finally:
         plt.close(fig)
-    assert copies == [tmp_path / "mine" / "t.png", paths.path("vault_figures") / "t.png"]
+    assert copies == [tmp_path / "mine" / "t.png", paths.path("docs_figures") / "t.png"]
 
 
 # ----------------------------------------------------------------------------------------------- 4. R5: no drive path in a script
