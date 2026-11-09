@@ -10,10 +10,12 @@ A **36-slot, 8-pole permanent-magnet-assisted synchronous reluctance motor** (PM
 > - **Done, and published here:**
 >   - the cross-section, optimized;
 >   - its rotor, checked for stress at speed;
->   - its copper losses, with the proximity effect;
->   - the winding trade-offs;
+>   - its flux maps over the whole current plane, with cross-saturation and the iron loss;
+>   - its thermal model;
+>   - its copper losses, with the proximity effect, and the winding trade-offs;
+>   - its torque–speed, loss and efficiency estimates ([Motor map.md](Motor%20map.md));
 >   - an interactive flux page of the three designs ([open it](https://bill-gkionis.github.io/IPM-synRM/explorer/)).
-> - **Next:** the thermal model, the flux maps for MATLAB and Simulink, and the torque–speed and efficiency maps.
+> - **Next:** the MATLAB validation of the flux maps, then a flux-map-driven Simulink plant.
 > - **Not yet measured:** every number here is a finite-element estimate. Nothing has been measured on hardware yet.
 
 ## The interactive flux page
@@ -44,6 +46,13 @@ One self-contained page, running in the browser. Pictures between solved points 
 | Axis convention | d = the magnet axis, so L_d < L_q |
 | The optimized cross-section | outer bridge 1.4 mm, centre rib 1.0 mm, V angle 111°, slot opening 1.5 mm, tooth 3.0 mm, the same magnets. Against the starting design, at the same copper loss: **+60 % torque, and 4.8 % torque ripple instead of 18.5 %** |
 
+**What it can do, estimated** ([Motor map.md](Motor%20map.md) has every assumption). On a 60 mm stack and a 48 V bus, with a fan on the shaft:
+- **4.2 N·m continuously** at 3,000 rpm, and **8.7 N·m** for about 25 minutes from a cold start;
+- **2.97 kW peak** short-term, and still 2.7 kW at 16,330 rpm, the rotor's safe speed;
+- **a best efficiency of 95.2 %** (motor only).
+
+These are 2D finite-element estimates, not measurements.
+
 ## The pipeline
 
 ```mermaid
@@ -51,8 +60,10 @@ flowchart LR
   G["Geometry<br/>drawn in Python<br/>(motorgeo)"] --> F["FEMM 5.0<br/>2D magnetostatics,<br/>parallel workers"]
   F --> O["Optimizers<br/>NSGA-II · a full grid ·<br/>a blind Bayesian check"]
   O --> V["Verification<br/>CalculiX stress · Elmer ·<br/>ROSS · SALib"]
-  V --> W["Winding<br/>copper losses,<br/>proximity effect"]
-  W --> N["Next<br/>thermal · flux maps ·<br/>motor map · Simulink"]
+  V --> D["Motor data<br/>flux maps · thermal model ·<br/>copper losses"]
+  D --> W["Winding<br/>every candidate,<br/>with the heat"]
+  W --> P["Motor map<br/>torque–speed, losses,<br/>efficiency"]
+  P --> N["Next<br/>MATLAB validation ·<br/>Simulink plant · inverter"]
 ```
 
 **Three principles:**
@@ -137,6 +148,11 @@ On the band-free rotor:
 - **NSGA-II for the rotor,** a full grid for the stator, NSGA-II for both together, and every combination for the winding;
 - **a blind second run** with a different method (a Bayesian search on Gaussian-process surrogates) found the same design region, with a slightly better front in fewer designs. The chosen design comes from its front.
 
+**The size of the search:** 4,156 designs, each scored with 23 FEMM solves, about 96,000 solves in all:
+- the sweeps, 736;
+- the screening, NSGA-II and the grid, 1,973;
+- the blind run, 1,447.
+
 **The result, on the fine mesh, at the starting design's copper loss:**
 
 | | Starting design | Optimized |
@@ -186,7 +202,67 @@ CalculiX, in 2D plane stress, with the magnets as loose loads on their slot wall
 
 </details>
 
-### 8. The copper losses and the winding (November 2026)
+### 8. The flux maps (November 2026)
+
+The optimization scored one operating point. A drive needs the whole current plane. So the optimized motor's flux linkages ψ_d and ψ_q, its torque and its ripple were mapped over (i_d, i_q), up to 3 × the rated current and into field weakening:
+- **425 operating points, 15,202 FEMM solves** on the fine mesh. The negative-i_q half was solved, not mirrored, because the winding isn't mirror-symmetric about the d axis.
+- **The checks:**
+  - the d-q torque 1.5 p (ψ_d i_q − ψ_q i_d), fed from the maps, matches FEMM's own torque to **0.085 %** at worst;
+  - the two cross inductances agree, as reciprocity says they must (median difference 0.015 %).
+- **Cross-saturation is strong.** The best current angle (MTPA) is 23.5°, 37.4° and **43.3°** at 1, 2 and 3 × rated. A constant-parameter formula says 17.3°, 26.2° and **30.9°**, and at 3 × rated it puts the torque **41 % too high**. So the controller's MTPA table and the Simulink plant both come from the maps.
+- **The iron loss:**
+  - **The model:** a Bertotti model fitted to M-19 data (rms **6.9 %** cross-validated), applied to every harmonic of each mesh triangle's flux-density waveform over a full electrical period.
+  - **The result:** 9.0 W at the rated point at 3,000 rpm, and 129 W at 16,330 rpm (a 20 mm stack, 0.3 mm laminations).
+- **For MATLAB and Simulink:** the maps, with five scripts for Simscape's FEM-Parameterized PMSM block, are in [`matlab/maps/`](matlab/maps/). They are prepared, and not yet run in MATLAB.
+
+![Cross-saturation: ψ_d against i_d at four values of i_q, and the two cross inductances](docs/figures/maps/cross-saturation.png)
+
+<details><summary>More from the flux maps</summary>
+
+![ψ_d and ψ_q over the current plane](docs/figures/maps/flux-maps.png)
+![The torque over the current plane, and the MTPA path from the maps against the constant-parameter formula's](docs/figures/maps/torque-and-mtpa.png)
+![Apparent and incremental inductances](docs/figures/maps/inductances.png)
+![The Bertotti model against the M-19 data](docs/figures/maps/m19-loss-fit.png)
+![The iron loss along the MTPA path at three speeds, by region](docs/figures/maps/iron-loss.png)
+
+</details>
+
+### 9. The thermal model (November 2026)
+
+**The model:** a lumped thermal network of eleven parts:
+- the winding in the slots and its end turns;
+- the teeth and the yoke;
+- the housing, the end bells and the air in the end spaces;
+- the rotor, the magnets, the shaft and the bearings.
+
+Each loss enters at its own part. A steady state solves in a fraction of a millisecond, so the winding study and the motor map can call it at every speed.
+
+**Calibrated first:**
+- FEMM's heat flow and CalculiX matched two exact solutions within 0.13 %;
+- the network was then checked against a 2D finite-element slice of the stator, and agrees **within 2 %** on the hot spot and on the winding's mean temperature;
+- FEMM and CalculiX agree with each other to 0.033 %.
+
+**The cooling** is a fan on the shaft over a finned housing. Its airflow follows the speed, and its own power grows as the cube of the speed, as a load on the shaft.
+
+**What sheds the heat:**
+- **with the shaft fan,** forced air over the housing's fins and the end bells carries 73–95 % of it;
+- **in still air,** radiation carries 58 %;
+- **inside the motor,** the copper in the slots passes about three quarters of its heat to the teeth.
+
+**What limits the rating:** the N45 magnets reach their 80 °C before the winding nears its 155 °C, in every cooling, because the air gap ties the rotor to the stator's temperature. A 150 °C magnet grade would hand the limit to the winding, for 1.4–2.4 × the current.
+
+![Where the heat goes at each cooling's continuous limit](docs/figures/thermal/heat-paths.png)
+
+<details><summary>More from the thermal model</summary>
+
+![The network and the thermal resistance of every path](docs/figures/thermal/network.png)
+![The continuous limit against speed for each cooling](docs/figures/thermal/continuous-limit-vs-speed.png)
+![The copper loss each cooling can carry, per stack length](docs/figures/thermal/sustainable-current.png)
+![Heating from cold, and overloads](docs/figures/thermal/transients.png)
+
+</details>
+
+### 10. The copper losses and the winding (November 2026)
 
 **The method:**
 - FEMM's time-harmonic solver was first checked against the exact solutions for a round wire, over the range of strand sizes the winding uses;
@@ -198,14 +274,14 @@ CalculiX, in 2D plane stress, with the magnets as loose loads on their slot wall
 
 **The winding:** every winding that fits the slot, 20,316 of them, was then enumerated against:
 - the full copper loss;
-- the heat, from the thermal model (published next);
+- the heat, from the thermal model (step 9);
 - the inverter current that the 48 V bus calls for.
 
 The trade-off front shows the choice:
 - fewer turns buy speed for current;
 - each extra row of magnets raises the current.
 
-The final pick waits for the stack length and the cooling.
+The final pick waits for the stack length and the size of the shaft fan.
 
 ![R_ac / R_dc against frequency](docs/figures/copper-loss/rac-rdc-vs-frequency.png)
 
@@ -222,21 +298,57 @@ The final pick waits for the stack length and the cooling.
 
 </details>
 
-### 9. Next
+### 11. The motor map (November 2026)
 
-- **The thermal model:** a lumped thermal network of the motor, calibrated against FEMM's heat flow and CalculiX. It's built; its write-up is next.
-- **The flux maps:** the optimized motor's flux linkages over the whole current plane, with cross-saturation and the iron loss, prepared for MATLAB and Simulink's FEM-parameterized motor block, and then validated in MATLAB.
-- **The motor map:** torque, power, losses and efficiency against speed.
-- **Then:** a flux-map-driven Simulink plant, the magnets' demagnetisation and eddy losses, the rotor in 3D, and the inverter.
+The flux maps, the losses and the thermal network combine into what the motor can do across its speed range. [Motor map.md](Motor%20map.md) has every table, figure and assumption.
+
+**On a 60 mm stack and a 48 V bus,** with the smallest of the three shaft fans studied (50 W at the top speed):
+- **4.2 N·m continuously** at 3,000 rpm (1.32 kW);
+- **8.7 N·m short-term,** up to 2,718 rpm, for about 25 minutes from a cold start;
+- **2.97 kW peak,** and still 2.72 kW at 16,330 rpm. The short-term current equals the motor's characteristic current (84 A), so the power stays nearly flat to the top speed;
+- **a best efficiency of 95.2 %** (motor only), at 3,746 rpm and 2.9 N·m.
+
+**How it's solved and checked:**
+- MTPA, field weakening and MTPV are solved at every speed from the maps;
+- the energy balance closes at all 43,493 operating points;
+- FEMM re-solves of deep field-weakening points reproduce the maps within 0.016 %.
+
+**Also compared:** three fan sizes, four stack lengths, the winding's alternatives, a 150 °C magnet grade, and natural, external-fan and liquid cooling.
+
+**A note for the inverter:**
+- above 4,049 rpm the magnets' own voltage passes the 48 V bus, reaching 194 V at the top speed, so the inverter must hold a field-weakening current at speed;
+- an active short circuit is mild here: 84 A steady, and a brake of 0.12 N·m at the top speed.
+
+![Torque and power against speed with the three shaft fans](docs/figures/motor-map/envelopes-shaft-fans.png)
+
+<details><summary>More from the motor map</summary>
+
+![Where the loss goes along the envelope](docs/figures/motor-map/losses-fan-b.png)
+![The efficiency map](docs/figures/motor-map/efficiency-fan-b.png)
+![The current plane: MTPA, field weakening and MTPV](docs/figures/motor-map/current-plane.png)
+![The highest speed each fan allows](docs/figures/motor-map/top-speed-per-fan.png)
+![The stack table](docs/figures/motor-map/stack-table.png)
+![Natural convection, an external fan and a liquid jacket](docs/figures/motor-map/envelopes-other-coolings.png)
+
+</details>
+
+### 12. Next
+
+- **The MATLAB validation** of the flux maps: the scripts in [`matlab/maps/`](matlab/maps/) are prepared and not yet run in MATLAB. Then a **flux-map-driven Simulink plant** in place of the constant parameters.
+- **Then:**
+  - the magnets' demagnetisation and their eddy losses;
+  - the rotor in 3D;
+  - the protection at speed;
+  - the inverter.
 
 ## The model-fidelity checklist
 
 | Item | Status |
 |---|---|
-| Core saturation and cross-saturation | ✅ computed (flux maps, published next) |
+| Core saturation and cross-saturation | ✅ published (step 8, the flux maps); the MATLAB tables prepared, not yet run |
 | Higher field harmonics | 🟡 measured (air-gap spectrum, back-EMF, ripple); not yet in a plant |
-| Hysteresis and iron loss | ✅ computed (Bertotti, per mesh element; published next) |
-| Proximity and other AC copper losses | ✅ published (step 8) |
+| Hysteresis and iron loss | ✅ published (step 8: Bertotti, per mesh element) |
+| Proximity and other AC copper losses | ✅ published (step 10) |
 | High-frequency loss, magnet eddy currents | ⬜ Elmer, transient and 3D |
 | Torque and inertia scaling with diameter, length and air gap | ⬜ |
 
@@ -245,9 +357,12 @@ The final pick waits for the stack length and the cooling.
 | Path | Contents |
 |---|---|
 | [`python/`](python/) | The pipeline's code: geometry, FEMM driver, solver queue, studies, optimization, checks and tests ([guide](python/README.md)) |
+| [Motor map.md](Motor%20map.md) | What the optimized motor can do: torque, power, losses and efficiency against speed, with every assumption |
+| [`matlab/maps/`](matlab/maps/) | The flux maps for Simscape's FEM-Parameterized PMSM block, and the scripts that use them (prepared, not yet run in MATLAB) |
 | [`docs/figures/`](docs/figures/) | The figures of each step |
+| [`docs/explorer/`](docs/explorer/) | The interactive flux page, served by GitHub Pages ([open it](https://bill-gkionis.github.io/IPM-synRM/explorer/)) |
 | [`femm/`](femm/) | The first-pass FEMM model and its rotor-sweep screenshots |
-| [`matlab/`](matlab/) | The first-pass flux-linkage extraction, the Clarke and Park transforms, and the Simulink plants |
+| [`matlab/`](matlab/) | The first-pass flux-linkage extraction, the Clarke and Park transforms, the Simulink plants, and `maps/` (above) |
 | [`cad/`](cad/) | SolidWorks parts, assembly, drawings and equation files |
 
 FEMM's result files (`.ans`) aren't stored: FEMM regenerates them from the models. The state before the reorganisation is tagged `v0`.

@@ -25,7 +25,7 @@ is planned.
   [6 teaching scripts](#6-the-teaching-scripts), [7 optimization study](#7-the-optimization-study),
   [8 rotor stress check](#8-the-rotor-stress-check),
   [9 copper losses and windings](#9-copper-losses-with-the-proximity-effect-and-the-winding-studies),
-  [10 write-up to come](#10-code-in-place-write-up-and-results-to-come), [11 tests](#11-the-tests)
+  [10 thermal, flux maps, motor map](#10-the-thermal-network-the-flux-maps-and-the-motor-map), [11 tests](#11-the-tests)
 - [What is not in this folder](#what-is-not-in-this-folder)
 
 ## Setup and running
@@ -407,9 +407,9 @@ The first winding study (`optimization/winding.py`) priced the winding's AC loss
 | `optimization/winding_study.py` | The winding optimizer for the optimized motor: enumerates 20,316 windings (up to 30 strands in hand), applies the thermal limits (network with the copper losses of `copper_loss.py`) and the voltage rule (flux maps), and reads off the exact front of short-term current, corner speed and copper loss at a high-speed point, verified against all designs. | `uv run python -m optimization.winding_study --stage headline` (7 s); `uv run python -m optimization.winding_study` (everything and the figures, about 95 s); `uv run pytest tests/test_winding_study.py -q` (37 tests, 8 s); no FEMM, needs the optimized design and flux maps from earlier runs in `out/` | At 60 mm stack, 48 V, shaft fan: the exact front has 8 designs; the recommended winding is 9 turns a coil side, 4 paths, 7 x 0.56 mm strands in a cluster, 81.5 A short-term. |
 | `optimization/winding_study_figures.py` | The pictures of `winding_study.py`, no FEMM: the front with the recommended winding, what the shortlisted windings' copper loss is made of, the strand arrangements, the fronts of the four stacks with the bus, magnet and fan variants, the cap on strands in hand, and the torque-speed envelopes. Called by `winding_study.py`. | | |
 
-### 10. Code in place; write-up and results to come
+### 10. The thermal network, the flux maps and the motor map
 
-Code in place; write-up and results to come. The four parts below have their code and tests in place; what they found is not written up here yet.
+The four parts below are written up in the repository's [README](../README.md) (steps 8, 9 and 11) and in [Motor map.md](../Motor%20map.md); the flux maps' MATLAB tables and scripts are in [`matlab/maps/`](../matlab/maps/), prepared and not yet run in MATLAB.
 
 #### Thermal network
 
@@ -521,7 +521,7 @@ The tests are run from `python/` with pytest and, like the code, assume Windows.
 - **FEMM 4.2's reference outputs** (`femm42-out/`, 1.2 GB, with its SHA-256 list) are kept outside the repository.
   `validation/compare.py`, `validation/mesh_checks.py` and `validation/provenance.py` read them, `config.toml` names the folder
   (`femm42_out`), and `tests/test_paths.py` expects it to exist.
-- **The MATLAB flux-map files** (`matlab/maps/`) are published later, with their write-up; `optimization/maps_matlab.py` writes
+- **The MATLAB flux-map files** are in the repository's [`matlab/maps/`](../matlab/maps/), one folder up; `optimization/maps_matlab.py` writes
   `matlab/maps/fem_maps.mat` and reads it back.
 - **The results of the studies** (`out/`) are git-ignored and not in the repository: the optimized design
   (`out/optimization/final/final.json`), the flux and iron-loss maps (`out/optimization/maps/chosen/`), the flux-explorer sweep and the
