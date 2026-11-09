@@ -1,0 +1,676 @@
+<title>Rotor Flux Explorer</title>
+
+<meta name="description" content="Flux lines in the 8-pole V-magnet IPM synRM rotor, from FEMM solves: move the magnets, switch the air band, set the 3-phase currents and turn the rotor.">
+<!-- The page loads nothing from the network (validation/compare.py checks it): its data is inside this file, and its fonts are the
+     stacks in :root below. Until 2026-11-04 two <link> lines here fetched Barlow Semi Condensed, IBM Plex Sans and IBM Plex Mono
+     from Google Fonts whenever the PC was online. To get those three back without the network, embed them as base64
+     @font-face rules. -->
+<style>
+/* Layout: a lab bench. The field map is the instrument (hero, left), the control rack on the right, the readouts
+   and two small charts under the map. One column on phones. */
+:root {
+  --bg: #f3f4f1;          /* bench: grey with a faint copper-green bias */
+  --panel: #fbfbf9;
+  --ink: #15181b;
+  --ink2: #4b4f53;
+  --muted: #84898d;
+  --rule: #dcdfda;
+  --accent: #b5562a;      /* copper, like the windings */
+  --accent-ink: #ffffff;
+  --magnet: #d1495b;
+  --band: #15181b;
+  --phA: #2a78d6; --phB: #eb6834; --phC: #1baf7a;
+  --pos: #e34948; --neg: #2a78d6; --zero: #ecebe6;   /* slot current: out of / into the screen */
+  --map-bg: #fbfbf9;
+  --flux: #1e2328;
+  --ramp0: #fbfbf9; --ramp1: #cde2fb; --ramp2: #86b6ef; --ramp3: #3987e5; --ramp4: #1c5cab; --ramp5: #0d366b;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111315; --panel: #181b1e; --ink: #ecedeb; --ink2: #b7bbb9; --muted: #7d8287; --rule: #2a2e32;
+  --accent: #d9774a; --accent-ink: #111315; --magnet: #ec6476; --band: #ecedeb;
+  --phA: #3987e5; --phB: #d95926; --phC: #199e70; --pos: #e66767; --neg: #3987e5; --zero: #2c3034;
+  --map-bg: #121417; --flux: #e6ebf0;
+  --ramp0: #121417; --ramp1: #13304f; --ramp2: #184f95; --ramp3: #3987e5; --ramp4: #86b6ef; --ramp5: #e3efff;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111315; --panel: #181b1e; --ink: #ecedeb; --ink2: #b7bbb9; --muted: #7d8287; --rule: #2a2e32;
+  --accent: #d9774a; --accent-ink: #111315; --magnet: #ec6476; --band: #ecedeb;
+  --phA: #3987e5; --phB: #d95926; --phC: #199e70; --pos: #e66767; --neg: #3987e5; --zero: #2c3034;
+  --map-bg: #121417; --flux: #e6ebf0;
+  --ramp0: #121417; --ramp1: #13304f; --ramp2: #184f95; --ramp3: #3987e5; --ramp4: #86b6ef; --ramp5: #e3efff;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.45 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 28px; }
+.app { max-width: 1320px; margin: 0 auto; display: grid; gap: 14px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+h1 { font: 600 26px/1.1 var(--font-display); letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
+.sub { color: var(--ink2); margin: 0; max-width: 72ch; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 14px; align-items: start; }
+.left { display: grid; gap: 14px; min-width: 0; }
+.mapwrap { position: relative; background: var(--map-bg); border: 1px solid var(--rule); border-radius: 6px;
+  aspect-ratio: 2 / 1.08; overflow: hidden; max-width: 100%; }
+.mapwrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.maplegend { position: absolute; left: 10px; bottom: 8px; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+  font: 11px/1.3 var(--font-body); color: var(--ink2); pointer-events: none; }
+.bar { width: 120px; height: 8px; border-radius: 2px; border: 1px solid var(--rule); }
+.maptag { position: absolute; right: 10px; top: 8px; font: 500 12px/1.2 var(--font-data); color: var(--ink2);
+  text-align: right; pointer-events: none; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 4px 16px 14px; display: grid; }
+.panel section { padding-block: 12px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
+.panel section:last-child { border-bottom: 0; }
+h2 { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink2); margin: 0; }
+.note { font-size: 12px; color: var(--muted); margin: 0; }
+.ctl { display: grid; gap: 3px; }
+.ctl .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ctl label { font-weight: 500; }
+.val { font: 500 12.5px/1.2 var(--font-data); font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; }
+.val.changed { color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 2px 0; }
+.ticks { display: flex; justify-content: space-between; font: 10.5px/1 var(--font-data); color: var(--muted); padding-inline: 2px; }
+.ticks span.mine { color: var(--ink); font-weight: 500; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--ink2); padding: 7px 8px; font: 500 12.5px var(--font-body); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+.btns { display: flex; flex-wrap: wrap; gap: 6px; }
+button.chip { border: 1px solid var(--rule); background: var(--bg); color: var(--ink); border-radius: 5px; padding: 6px 9px;
+  font: 500 12.5px var(--font-body); cursor: pointer; }
+button.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+button.primary { border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 5px; padding: 7px 14px;
+  font: 600 13px var(--font-body); cursor: pointer; min-width: 88px; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.check { display: flex; align-items: center; gap: 8px; }
+.readouts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; background: var(--panel);
+  border: 1px solid var(--rule); border-radius: 6px; }
+.stat { padding: 10px 12px; border-right: 1px solid var(--rule); min-width: 0; }
+.stat:last-child { border-right: 0; }
+.stat .k { font: 600 11px/1.2 var(--font-display); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.stat .v { font: 500 20px/1.25 var(--font-data); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.stat .u { font: 12px var(--font-body); color: var(--muted); margin-left: 2px; }
+.stat .d { font: 12px var(--font-data); color: var(--ink2); }
+.charts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.chart { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px 8px; min-width: 0; }
+.chart h3 { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.04em; margin: 0 0 6px; color: var(--ink); }
+.chart canvas { width: 100%; height: 190px; display: block; }
+footer { color: var(--muted); font-size: 12px; max-width: 110ch; }
+footer p { margin: 4px 0; }
+[hidden] { display: none !important; }
+/* status card in the middle of the map: "unpacking", or what went wrong (a blank map must never be the only symptom) */
+.status { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); width: min(56ch, calc(100% - 32px));
+  display: grid; gap: 8px; text-align: center; font: 500 13px/1.5 var(--font-body); color: var(--muted); }
+.status.bad { z-index: 1; padding: 18px 22px; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+  color: var(--ink2); text-align: left; }
+.status b { font: 600 17px/1.25 var(--font-display); color: var(--ink); }
+.status p { margin: 0; }
+.status a { color: var(--accent); font: 500 12.5px/1.4 var(--font-data); overflow-wrap: anywhere; }
+@media (max-width: 1000px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+  .readouts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat:nth-child(3) { border-right: 0; }
+  .stat:nth-child(-n+3) { border-bottom: 1px solid var(--rule); }
+}
+@media (max-width: 620px) {
+  .charts { grid-template-columns: minmax(0, 1fr); }
+  .readouts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(3) { border-right: 1px solid var(--rule); }
+  .stat:nth-child(2n) { border-right: 0; }
+  .stat:nth-child(-n+4) { border-bottom: 1px solid var(--rule); }
+  h1 { font-size: 22px; }
+}
+</style>
+
+<div class="app">
+  <header>
+    <h1>Rotor Flux Explorer</h1>
+    <p class="sub">The 8-pole V-magnet rotor, 90° window with one north pole in the middle. Every picture is a FEMM
+      solution: flux lines are drawn so that each gap between two lines carries the same flux.</p>
+  </header>
+
+  <div class="stage">
+    <div class="left">
+      <div class="mapwrap" id="mapwrap">
+        <canvas id="gl" aria-label="Flux lines and flux density in the rotor and stator"></canvas>
+        <canvas id="ov" aria-hidden="true"></canvas>
+        <div class="status" id="status" role="status">Unpacking the FEMM solutions…</div>
+        <noscript><div class="status bad"><b>This page needs JavaScript.</b><p>Allow JavaScript for this page, then reload it.</p></div></noscript>
+        <div class="maptag" id="maptag"></div>
+        <div class="maplegend">
+          <span>|B|</span><span class="bar" id="rampbar"></span><span id="rampmax">0 … 2.2 T</span>
+          <span>· red outline: magnet, arrow = its north</span><span>· slots: <b style="color:var(--pos)">current out of screen</b> / <b style="color:var(--neg)">into screen</b></span>
+        </div>
+      </div>
+
+      <div class="readouts" id="readouts">
+        <div class="stat"><div class="k">Torque now</div><div class="v"><span id="r_t">–</span><span class="u">N·m</span></div><div class="d" id="r_t2">at this rotor position</div></div>
+        <div class="stat"><div class="k">Mean torque</div><div class="v"><span id="r_tm">–</span><span class="u">N·m</span></div><div class="d" id="r_tm2">over one ripple period</div></div>
+        <div class="stat"><div class="k">vs first pass</div><div class="v"><span id="r_vs">–</span></div><div class="d">same current, with band</div></div>
+        <div class="stat"><div class="k">ψ<sub>d</sub> along magnet</div><div class="v"><span id="r_pd">–</span><span class="u">mWb</span></div><div class="d" id="r_pm">magnets alone –</div></div>
+        <div class="stat"><div class="k">ψ<sub>q</sub> across</div><div class="v"><span id="r_pq">–</span><span class="u">mWb</span></div><div class="d">from the q current</div></div>
+        <div class="stat"><div class="k">Current</div><div class="v"><span id="r_i">–</span><span class="u">A</span></div><div class="d" id="r_idq">i<sub>d</sub> –, i<sub>q</sub> –</div></div>
+      </div>
+
+      <div class="charts">
+        <div class="chart"><h3>Three-phase currents over one electrical turn</h3><canvas id="c_phase"></canvas></div>
+        <div class="chart"><h3>Mean torque vs current angle</h3><canvas id="c_torque"></canvas></div>
+      </div>
+    </div>
+
+    <aside class="panel" aria-label="Controls">
+      <section>
+        <h2>Rotor shape</h2>
+        <p class="note">One change at a time: moving a slider puts the others back to the first-pass design (bold tick).</p>
+        <div id="sliders"></div>
+        <div class="ctl">
+          <div class="row"><label>Air band behind each magnet</label></div>
+          <div class="seg" role="group" aria-label="Air band">
+            <button id="band_air" aria-pressed="true">Air (first pass)</button>
+            <button id="band_steel" aria-pressed="false">Steel (no band)</button>
+          </div>
+        </div>
+        <div class="btns"><button class="chip" id="reset_geom">Back to first pass</button></div>
+      </section>
+
+      <section>
+        <h2>Current</h2>
+        <div class="btns" role="group" aria-label="Current presets">
+          <button class="chip" id="p_q">All q-axis</button>
+          <button class="chip" id="p_mtpa">Best angle (MTPA)</button>
+          <button class="chip" id="p_d">All d-axis</button>
+        </div>
+        <div class="ctl">
+          <div class="row"><label for="s_I">Size, peak per phase</label><span class="val" id="v_I"></span></div>
+          <input type="range" id="s_I" min="0" max="20" step="0.5" value="10">
+        </div>
+        <div class="ctl">
+          <div class="row"><label for="s_g">Angle from q toward −d</label><span class="val" id="v_g"></span></div>
+          <input type="range" id="s_g" min="0" max="90" step="0.5" value="28">
+        </div>
+        <p class="note" id="curnote">All q-axis gives only magnet torque. Leaning toward −d adds reluctance torque until the best angle; all d-axis gives none.</p>
+      </section>
+
+      <section>
+        <h2>Rotation</h2>
+        <div class="ctl">
+          <div class="row"><label for="s_t">Rotor position</label><span class="val" id="v_t"></span></div>
+          <input type="range" id="s_t" min="0" max="360" step="0.5" value="0">
+        </div>
+        <div class="btns">
+          <button class="primary" id="play">Play</button>
+          <label class="check"><input type="checkbox" id="follow"> Follow the rotor</label>
+        </div>
+        <p class="note">The currents stay locked to the rotor, as in a running motor: the field turns with it.</p>
+      </section>
+
+      <section>
+        <h2>Display</h2>
+        <div class="ctl">
+          <div class="row"><label for="s_n">Flux lines</label><span class="val" id="v_n"></span></div>
+          <input type="range" id="s_n" min="16" max="90" step="1" value="44">
+        </div>
+        <label class="check"><input type="checkbox" id="showB" checked> Colour by flux density |B|</label>
+      </section>
+    </aside>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="meta">__META__</script>
+<script>
+"use strict";
+// Runs before the 20 MB of data below is read, so the page can say what it's doing, or what went wrong.
+function showProblem(title, detail, link) {
+  const box = document.getElementById("status"), b = document.createElement("b");
+  b.textContent = title; box.replaceChildren(b);
+  if (detail) { const p = document.createElement("p"); p.textContent = detail; box.append(p); }
+  if (link) { const a = document.createElement("a"); a.href = link[0]; a.textContent = link[1]; box.append(a); }
+  box.classList.add("bad"); box.hidden = false;
+}
+// flux_explorer_build.py puts the data in the meta block. Until then it holds a placeholder, not JSON.
+const PAGE_BUILT = document.getElementById("meta").textContent.trim().startsWith("{");
+if (!PAGE_BUILT) showProblem("This is the template, not the explorer.",
+  "It's the empty shell that flux_explorer_build.py fills with the FEMM results. Open the built page:",
+  ["pages/Rotor%20Flux%20Explorer.html", "pages\\Rotor Flux Explorer.html"]);
+const reportError = (msg) => { if (PAGE_BUILT) showProblem("The page stopped on an error.", `${msg} (F12 → Console has the details.)`); };
+window.addEventListener("error", (e) => reportError(e.message));
+window.addEventListener("unhandledrejection", (e) => reportError(String((e.reason && e.reason.message) || e.reason)));
+</script>
+__BLOBS__
+<script>
+"use strict";
+if (!PAGE_BUILT) throw new Error("flux_explorer_template.html opened directly: the page says where the built one is");
+const META = JSON.parse(document.getElementById("meta").textContent);
+const $ = (id) => document.getElementById(id);
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const hex3 = (h) => { h = h.replace("#", ""); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) / 255); };
+const lerp = (a, b, t) => a + (b - a) * t;
+const D2R = Math.PI / 180;
+
+// ------------------------------------------------------------------ state
+const S = { gid: 0, band: 0, I: 10, gamma: 28, theta: 0, playing: false, follow: false, nLines: 44, showB: true,
+            sliderIdx: Object.fromEntries(META.sliderOrder.map(k => [k, META.sliders[k].base])) };
+
+// ------------------------------------------------------------------ data: decode one rotor on demand
+const cache = new Map();
+async function loadGeom(gid) {
+  if (cache.has(gid)) return cache.get(gid);
+  const b64 = document.getElementById("g" + gid).textContent.trim();
+  const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const ds = new DecompressionStream("gzip");
+  const buf = await new Response(new Blob([bin]).stream().pipeThrough(ds)).arrayBuffer();
+  // layout (flux_explorer_build.py): [N, M, states] uint32 | x,y uint16 micrometres | triangles uint16 |
+  // A as 12-bit steps, each the difference to the previous node: all low bytes, then all high bytes
+  const head = new Uint32Array(buf, 0, 3), N = head[0], M = head[1], nState = head[2];
+  let off = 12;
+  const um = new Uint16Array(buf, off, 2 * N); off += 4 * N;
+  const xy = new Float32Array(2 * N); for (let i = 0; i < 2 * N; i++) xy[i] = um[i] / 1000;
+  const tri = new Uint16Array(buf.slice(off, off + 6 * M)); off += 6 * M;
+  const lo = new Uint8Array(buf, off, nState * N), hi = new Uint8Array(buf, off + nState * N, nState * N);
+  const A = new Int16Array(nState * N);
+  for (let s = 0; s < nState; s++) {
+    let acc = 0;
+    for (let n = 0, k = s * N; n < N; n++, k++) { let d = lo[k] | (hi[k] << 8); if (d > 32767) d -= 65536; acc += d; A[k] = acc; }
+  }
+  // gradient coefficients per triangle (B = 1000 * |grad A|, coordinates in mm)
+  const gc = new Float32Array(6 * M);
+  for (let t = 0; t < M; t++) {
+    const i0 = tri[3 * t], i1 = tri[3 * t + 1], i2 = tri[3 * t + 2];
+    const x0 = xy[2 * i0], y0 = xy[2 * i0 + 1], x1 = xy[2 * i1], y1 = xy[2 * i1 + 1], x2 = xy[2 * i2], y2 = xy[2 * i2 + 1];
+    const det = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
+    gc[6 * t] = (y1 - y2) / det; gc[6 * t + 1] = (y2 - y0) / det; gc[6 * t + 2] = (y0 - y1) / det;      // dA/dx weights
+    gc[6 * t + 3] = (x2 - x1) / det; gc[6 * t + 4] = (x0 - x2) / det; gc[6 * t + 5] = (x1 - x0) / det;  // dA/dy weights
+  }
+  const rotor = new Float32Array(3 * M), pos = new Float32Array(6 * M);
+  for (let t = 0; t < M; t++) for (let k = 0; k < 3; k++) {
+    const n = tri[3 * t + k];
+    pos[6 * t + 2 * k] = xy[2 * n]; pos[6 * t + 2 * k + 1] = xy[2 * n + 1];
+    rotor[3 * t + k] = Math.hypot(xy[2 * n], xy[2 * n + 1]) < META.rSplit ? 1 : 0;
+  }
+  const g = { N, M, xy, tri, A, gc, rotor, pos, aNode: new Float32Array(N), aV: new Float32Array(3 * M), bV: new Float32Array(3 * M) };
+  cache.set(gid, g);
+  return g;
+}
+
+// ------------------------------------------------------------------ fields: blend the solved states
+function curIndex(k, gi) { return k === 0 ? 0 : 1 + (k - 1) * 4 + gi; }        // k: 0 A, 10 A, 20 A; gi: gamma 0/30/60/90
+function blendField(g) {
+  const N = g.N, out = g.aNode, sc = META.aScale / 2047;
+  const thp = S.theta - 120 * Math.floor(S.theta / 120);                         // 0..120
+  const tp = thp / 30, p0 = Math.min(Math.floor(tp), META.nPos - 2), tpos = tp - p0;
+  const gg = S.gamma / 30, g0 = Math.min(Math.floor(gg), 2), tg = gg - g0;
+  const terms = [];                                                              // [weight, state index]
+  const add = (w, cs, p) => { if (w !== 0) terms.push([w, (S.band * META.nCur + cs) * META.nPos + p]); };
+  for (const [wp, p] of [[1 - tpos, p0], [tpos, p0 + 1]]) {
+    if (wp === 0) continue;
+    const lev = (k, w) => { add(w * (1 - tg), curIndex(k, g0), p); add(w * tg, curIndex(k, g0 + 1), p); };
+    if (S.I <= 10) { add(wp * (1 - S.I / 10), 0, p); lev(1, wp * S.I / 10); }
+    else { const t = (S.I - 10) / 10; lev(1, wp * (1 - t)); lev(2, wp * t); }
+  }
+  out.fill(0);
+  for (const [w, s] of terms) {
+    const A = g.A, base = s * N, ws = w * sc;
+    for (let n = 0; n < N; n++) out[n] += ws * A[base + n];
+  }
+  // per-vertex A and per-triangle |B|
+  const tri = g.tri, gc = g.gc, aV = g.aV, bV = g.bV, M = g.M;
+  for (let t = 0; t < M; t++) {
+    const a0 = out[tri[3 * t]], a1 = out[tri[3 * t + 1]], a2 = out[tri[3 * t + 2]];
+    const dx = gc[6 * t] * a0 + gc[6 * t + 1] * a1 + gc[6 * t + 2] * a2;
+    const dy = gc[6 * t + 3] * a0 + gc[6 * t + 4] * a1 + gc[6 * t + 5] * a2;
+    const b = 1000 * Math.hypot(dx, dy);
+    aV[3 * t] = a0; aV[3 * t + 1] = a1; aV[3 * t + 2] = a2;
+    bV[3 * t] = bV[3 * t + 1] = bV[3 * t + 2] = b;
+  }
+}
+
+// ------------------------------------------------------------------ WebGL renderer
+const glc = $("gl"), ovc = $("ov");
+const gl = glc.getContext("webgl2", { antialias: true, premultipliedAlpha: false });
+let prog, buf = {}, uploadedGid = -1;
+const VS = `#version 300 es
+in vec2 aPos; in float aRot; in float aA; in float aB;
+uniform float uRotor, uTile, uView; uniform vec2 uC, uK;
+out float vA; flat out float vB; out vec2 vP;
+vec2 rot(vec2 p, float a) { float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
+void main() { vec2 p = rot(aPos, aRot * uRotor + uTile + uView); vP = p; vA = aA; vB = aB;
+  gl_Position = vec4((p - uC) * uK, 0.0, 1.0); }`;
+const FS = `#version 300 es
+precision highp float;
+in float vA; flat in float vB; in vec2 vP;
+uniform float uStep, uBmax, uShowB; uniform vec3 uRamp[6]; uniform vec3 uBg, uLine;
+out vec4 o;
+vec3 ramp(float t) { t = clamp(t, 0.0, 1.0) * 5.0; int i = int(min(floor(t), 4.0)); return mix(uRamp[i], uRamp[i + 1], t - float(i)); }
+void main() {
+  if (abs(atan(vP.x, vP.y)) > 0.78540) discard;
+  vec3 col = uShowB > 0.5 ? ramp(vB / uBmax) : uBg;
+  float f = vA / uStep;
+  float d = abs(fract(f + 0.5) - 0.5) / max(fwidth(f), 1e-6);
+  float line = 1.0 - smoothstep(0.45, 1.15, d);
+  o = vec4(mix(col, uLine, 0.7 * line), 1.0);
+}`;
+function initGL() {
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  for (const k of ["aPos", "aRot", "aA", "aB"]) buf[k] = gl.createBuffer();
+}
+function bindAttr(name, size) {
+  const loc = gl.getAttribLocation(prog, name);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf[name]); gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+}
+
+// view: mm -> pixels. Window = +-45 deg around the view centre, radius 20 .. 64.6 mm
+const VIEW = { xh: 46.2, y0: 19.5, y1: 65.3 };
+function viewCentreDeg() { return META.axisA + (S.follow ? S.theta / META.polePairs : 0); }
+function fit(cv) {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  const sx = w / (2 * VIEW.xh), sy = h / (VIEW.y1 - VIEW.y0), s = Math.min(sx, sy);
+  return { w, h, s, cx: 0, cy: (VIEW.y0 + VIEW.y1) / 2, dpr };
+}
+function drawGL(g, rotorDeg, frameDeg) {
+  const v = fit(glc);
+  gl.viewport(0, 0, v.w, v.h);
+  const bg = hex3(css("--map-bg"));
+  gl.clearColor(bg[0], bg[1], bg[2], 1); gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.useProgram(prog);
+  if (uploadedGid !== S.gid) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.aPos); gl.bufferData(gl.ARRAY_BUFFER, g.pos, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.aRot); gl.bufferData(gl.ARRAY_BUFFER, g.rotor, gl.STATIC_DRAW);
+    uploadedGid = S.gid;
+  }
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf.aA); gl.bufferData(gl.ARRAY_BUFFER, g.aV, gl.DYNAMIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf.aB); gl.bufferData(gl.ARRAY_BUFFER, g.bV, gl.DYNAMIC_DRAW);
+  bindAttr("aPos", 2); bindAttr("aRot", 1); bindAttr("aA", 1); bindAttr("aB", 1);
+  const U = (n) => gl.getUniformLocation(prog, n);
+  gl.uniform1f(U("uRotor"), rotorDeg * D2R);
+  gl.uniform1f(U("uView"), (90 - viewCentreDeg()) * D2R);
+  gl.uniform2f(U("uC"), v.cx, v.cy);
+  gl.uniform2f(U("uK"), 2 * v.s / v.w, 2 * v.s / v.h);
+  gl.uniform1f(U("uStep"), META.aSpan / S.nLines);
+  gl.uniform1f(U("uBmax"), 2.2);
+  gl.uniform1f(U("uShowB"), S.showB ? 1 : 0);
+  gl.uniform3fv(U("uRamp"), new Float32Array([0, 1, 2, 3, 4, 5].flatMap(i => hex3(css("--ramp" + i)))));
+  gl.uniform3fv(U("uBg"), new Float32Array(bg));
+  gl.uniform3fv(U("uLine"), new Float32Array(hex3(css("--flux"))));
+  for (let j = -2; j <= 2; j++) {
+    gl.uniform1f(U("uTile"), (90 * j + frameDeg) * D2R);
+    gl.drawArrays(gl.TRIANGLES, 0, 3 * g.M);
+  }
+}
+
+// ------------------------------------------------------------------ overlay: outlines, coils, arrows
+function drawOverlay(trueRotorDeg) {
+  const v = fit(ovc), c = ovc.getContext("2d");
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, v.w, v.h);
+  const view = (90 - viewCentreDeg()) * D2R;
+  const P = (x, y, extra) => { const a = view + extra, ca = Math.cos(a), sa = Math.sin(a);
+    const X = ca * x - sa * y, Y = sa * x + ca * y; return [v.w / 2 + (X - v.cx) * v.s, v.h / 2 - (Y - v.cy) * v.s]; };
+  // clip to the 90-degree wedge
+  c.save(); c.beginPath();
+  const o = P(0, 0, 0); c.moveTo(o[0], o[1]);
+  for (let a = -45; a <= 45.01; a += 1) { const p = [Math.sin(a * D2R) * 80, Math.cos(a * D2R) * 80];
+    c.lineTo(v.w / 2 + p[0] * v.s, v.h / 2 - (p[1] - v.cy) * v.s); }
+  c.closePath(); c.clip();
+  const poly = (pts, extra) => { c.beginPath(); pts.forEach(([x, y], i) => { const p = P(x, y, extra); i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); }); c.closePath(); };
+  const lw = Math.max(1, v.dpr);
+  // stator: coils coloured by their live current
+  const cur = phaseCurrents(S.theta);
+  const pos = hex3(css("--pos")), neg = hex3(css("--neg")), zero = hex3(css("--zero"));
+  for (let j = -2; j <= 2; j++) {
+    const ex = 90 * j * D2R;
+    for (const coil of META.stator.coils) {
+      const val = coil.sign * cur[coil.phase] / 20, t = Math.min(1, Math.abs(val));
+      const end = val >= 0 ? pos : neg, col = zero.map((z, k) => Math.round(255 * lerp(z, end[k], t)));
+      poly(coil.pts, ex); c.fillStyle = `rgb(${col.join(",")})`; c.globalAlpha = 0.72; c.fill(); c.globalAlpha = 1;
+      c.strokeStyle = css("--muted"); c.lineWidth = 0.6 * lw; c.stroke();
+      if (v.s > 6) { const p = P(coil.lab[0], coil.lab[1], ex); c.fillStyle = css("--ink2");
+        c.font = `${10 * v.dpr}px ${css("--font-data")}`; c.textAlign = "center"; c.textBaseline = "middle";
+        c.fillText(coil.phase + (coil.sign > 0 ? "+" : "−"), p[0], p[1]); }
+    }
+    for (const e of META.stator.edges) { c.beginPath(); e.forEach(([x, y], i) => { const p = P(x, y, ex); i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); });
+      c.strokeStyle = css("--muted"); c.lineWidth = 0.8 * lw; c.stroke(); }
+  }
+  // rotor: bands, magnets, arrows (rotate with the rotor)
+  const R = META.rotor[S.gid];
+  for (let j = -2; j <= 2; j++) {
+    const ex = (90 * j + trueRotorDeg) * D2R;
+    for (const b of R.bands) { poly(b, ex); c.strokeStyle = css("--band"); c.lineWidth = 1.4 * lw;
+      c.setLineDash(S.band ? [2 * lw, 3 * lw] : []); c.stroke(); }
+    c.setLineDash([]);
+    for (const m of R.magnets) {
+      poly(m.pts, ex); c.strokeStyle = css("--magnet"); c.lineWidth = 1.6 * lw; c.stroke();
+      const p0 = P(m.lab[0], m.lab[1], ex), a = m.dir * D2R;
+      const p1 = P(m.lab[0] + 2.3 * Math.cos(a), m.lab[1] + 2.3 * Math.sin(a), ex);
+      arrow(c, p0, p1, css("--magnet"), 1.5 * lw);
+    }
+    c.beginPath(); R.od.forEach(([x, y], i) => { const p = P(x, y, ex); i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); });
+    c.strokeStyle = css("--muted"); c.lineWidth = 0.8 * lw; c.stroke();
+  }
+  c.restore();
+  // wedge edges + d-axis of the centre pole
+  c.strokeStyle = css("--rule"); c.lineWidth = lw;
+  for (const s of [-1, 1]) { c.beginPath(); const a = s * 45 * D2R;
+    c.moveTo(v.w / 2 + Math.sin(a) * 20 * v.s, v.h / 2 - (Math.cos(a) * 20 - v.cy) * v.s);
+    c.lineTo(v.w / 2 + Math.sin(a) * 64.6 * v.s, v.h / 2 - (Math.cos(a) * 64.6 - v.cy) * v.s); c.stroke(); }
+}
+function arrow(c, a, b, col, w) {
+  const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy); if (L < 2) return;
+  const ux = dx / L, uy = dy / L, h = Math.min(7 * w, L * 0.45);
+  c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w;
+  c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0] - ux * h * 0.6, b[1] - uy * h * 0.6); c.stroke();
+  c.beginPath(); c.moveTo(b[0], b[1]); c.lineTo(b[0] - ux * h - uy * h * 0.45, b[1] - uy * h + ux * h * 0.45);
+  c.lineTo(b[0] - ux * h + uy * h * 0.45, b[1] - uy * h - ux * h * 0.45); c.closePath(); c.fill();
+}
+
+// ------------------------------------------------------------------ physics read-outs (solved values, interpolated)
+function idq() { return [-S.I * Math.sin(S.gamma * D2R), S.I * Math.cos(S.gamma * D2R)]; }
+function phaseCurrents(th) {
+  const [d, q] = idq(), out = {};
+  [["A", 0], ["B", -120], ["C", 120]].forEach(([ph, s]) => { const a = (th + s) * D2R; out[ph] = d * Math.cos(a) - q * Math.sin(a); });
+  return out;
+}
+function spline(ys, x) {                    // Catmull-Rom through evenly spaced ys (x in index units)
+  const n = ys.length, i = Math.max(0, Math.min(n - 2, Math.floor(x))), t = x - i;
+  const p0 = ys[Math.max(0, i - 1)], p1 = ys[i], p2 = ys[i + 1], p3 = ys[Math.min(n - 1, i + 2)];
+  return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+}
+function scal(name, gid, band, I, gamma, thIdx) {   // quadratic in I through 0/10/20 A, spline in gamma, at one solved position
+  const T = META.scal[gid][band][name];               // [I level][gamma 0..90 step 15][position]
+  const gx = gamma / 15, at = (k) => spline(T[k].map(r => r[thIdx]), gx);
+  const t0 = at(0), t1 = at(1), t2 = at(2), b = (t2 - 2 * t1 + t0) / 200, a = (t1 - t0) / 10 - 10 * b;
+  return t0 + a * I + b * I * I;
+}
+function scalAt(name, gid, band, I, gamma, theta) {
+  const thp = theta - 120 * Math.floor(theta / 120), x = thp / 30, i = Math.floor(x) % 4, t = x - Math.floor(x);
+  return lerp(scal(name, gid, band, I, gamma, i), scal(name, gid, band, I, gamma, (i + 1) % 4), t);
+}
+function scalMean(name, gid, band, I, gamma) { let s = 0; for (let k = 0; k < 4; k++) s += scal(name, gid, band, I, gamma, k); return s / 4; }
+function mtpa(gid, band, I) {
+  let best = 0, bg = 0;
+  for (let g = 0; g <= 90; g += 0.5) { const t = scalMean("T", gid, band, I, g); if (t > best) { best = t; bg = g; } }
+  return [bg, best];
+}
+
+// ------------------------------------------------------------------ charts
+function setupCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, r.width, r.height];
+}
+function axes(c, w, h, x0, x1, y0, y1, xt, yt, xl, yl) {
+  const L = 40, Rr = 10, T = 8, B = 26, X = (x) => L + (x - x0) / (x1 - x0) * (w - L - Rr), Y = (y) => T + (y1 - y) / (y1 - y0) * (h - T - B);
+  c.font = `11px ${css("--font-data")}`; c.fillStyle = css("--muted"); c.strokeStyle = css("--rule"); c.lineWidth = 1;
+  for (const x of xt) { c.beginPath(); c.moveTo(X(x), T); c.lineTo(X(x), h - B); c.stroke(); c.textAlign = "center"; c.fillText(x + "", X(x), h - B + 13); }
+  for (const y of yt) { c.beginPath(); c.moveTo(L, Y(y)); c.lineTo(w - Rr, Y(y)); c.stroke(); c.textAlign = "right"; c.textBaseline = "middle"; c.fillText(y + "", L - 5, Y(y)); }
+  c.textBaseline = "alphabetic"; c.textAlign = "left"; c.fillStyle = css("--ink2"); c.font = `11px ${css("--font-body")}`;
+  c.fillText(xl, L, h - 2); c.save(); c.translate(11, T + 2); c.rotate(-Math.PI / 2); c.textAlign = "right"; c.fillText(yl, 0, 0); c.restore();
+  return [X, Y];
+}
+function drawPhaseChart() {
+  const [c, w, h] = setupCanvas($("c_phase")); c.clearRect(0, 0, w, h);
+  const top = Math.max(5, Math.ceil(S.I / 5) * 5);
+  const [X, Y] = axes(c, w, h, 0, 360, -top, top, [0, 60, 120, 180, 240, 300, 360], [-top, 0, top], "rotor position θe [° electrical]", "A");
+  const cols = { A: css("--phA"), B: css("--phB"), C: css("--phC") };
+  for (const ph of ["A", "B", "C"]) {
+    c.beginPath(); for (let th = 0; th <= 360; th += 3) { const v = phaseCurrents(th)[ph]; th ? c.lineTo(X(th), Y(v)) : c.moveTo(X(th), Y(v)); }
+    c.strokeStyle = cols[ph]; c.lineWidth = 2; c.stroke();
+  }
+  c.strokeStyle = css("--ink"); c.lineWidth = 1; c.beginPath(); c.moveTo(X(S.theta), Y(top)); c.lineTo(X(S.theta), Y(-top)); c.stroke();
+  const now = phaseCurrents(S.theta); let ly = 14;
+  for (const ph of ["A", "B", "C"]) {
+    c.fillStyle = cols[ph]; c.beginPath(); c.arc(X(S.theta), Y(now[ph]), 4, 0, 7); c.fill();
+    c.fillStyle = css("--ink"); c.font = `500 11px ${css("--font-data")}`; c.textAlign = "right";
+    c.fillText(`${ph} ${now[ph] >= 0 ? " " : "−"}${Math.abs(now[ph]).toFixed(1)} A`, w - 14, ly); ly += 14;
+    c.fillStyle = cols[ph]; c.fillRect(w - 98, ly - 22, 10, 3);
+  }
+}
+function drawTorqueChart() {
+  const [c, w, h] = setupCanvas($("c_torque")); c.clearRect(0, 0, w, h);
+  const curves = [];
+  for (const I of [10, 20]) {
+    const pts = []; for (let g = 0; g <= 90; g += 1) pts.push([g, scalMean("T", S.gid, S.band, I, g)]);
+    curves.push([I, pts]);
+  }
+  const ref = []; if (S.gid !== 0 || S.band !== 0) for (let g = 0; g <= 90; g += 1) ref.push([g, scalMean("T", 0, 0, 20, g)]);
+  const ymax = Math.max(0.5, ...curves.flatMap(([, p]) => p.map(q => q[1])), ...ref.map(q => q[1])) * 1.08;
+  const step = ymax > 2.4 ? 1 : 0.5, yt = []; for (let y = 0; y <= ymax; y += step) yt.push(+y.toFixed(1));
+  const [X, Y] = axes(c, w, h, 0, 90, 0, ymax, [0, 15, 30, 45, 60, 75, 90], yt, "current angle γ [°] (0 = all q, 90 = all d)", "N·m");
+  if (ref.length) { c.setLineDash([4, 4]); c.strokeStyle = css("--muted"); c.lineWidth = 1.5; c.beginPath();
+    ref.forEach(([g, t], i) => i ? c.lineTo(X(g), Y(t)) : c.moveTo(X(g), Y(t))); c.stroke(); c.setLineDash([]);
+    c.fillStyle = css("--muted"); c.font = `11px ${css("--font-body")}`; c.textAlign = "left"; c.fillText("first pass, 20 A", X(64), Y(ref[64][1]) - 6); }
+  for (const [I, pts] of curves) {
+    c.strokeStyle = css("--accent"); c.globalAlpha = I === 20 ? 1 : 0.55; c.lineWidth = 2; c.beginPath();
+    pts.forEach(([g, t], i) => i ? c.lineTo(X(g), Y(t)) : c.moveTo(X(g), Y(t))); c.stroke(); c.globalAlpha = 1;
+    const [mg, mt] = mtpa(S.gid, S.band, I);
+    c.fillStyle = css("--accent"); c.beginPath(); c.arc(X(mg), Y(mt), 3.5, 0, 7); c.fill();
+    c.fillStyle = css("--ink2"); c.font = `11px ${css("--font-body")}`; c.textAlign = "center";
+    c.fillText(`${I} A, best ${mg.toFixed(0)}°`, X(mg), Y(mt) - 8);
+  }
+  const tnow = scalMean("T", S.gid, S.band, S.I, S.gamma);
+  c.strokeStyle = css("--ink"); c.fillStyle = css("--panel"); c.lineWidth = 2; c.beginPath(); c.arc(X(S.gamma), Y(tnow), 5, 0, 7); c.fill(); c.stroke();
+}
+
+// ------------------------------------------------------------------ controls
+function buildSliders() {
+  const host = $("sliders");
+  for (const key of META.sliderOrder) {
+    const sl = META.sliders[key];
+    const div = document.createElement("div"); div.className = "ctl";
+    div.innerHTML = `<div class="row"><label for="sl_${key}">${sl.label}</label><span class="val" id="vl_${key}"></span></div>
+      <input type="range" id="sl_${key}" min="0" max="${sl.stops.length - 1}" step="1" value="${sl.base}">
+      <div class="ticks">${sl.stops.map((s, i) => `<span class="${i === sl.base ? "mine" : ""}">${s}</span>`).join("")}</div>`;
+    host.appendChild(div);
+    div.querySelector("input").addEventListener("input", (e) => {
+      for (const k of META.sliderOrder) if (k !== key) { S.sliderIdx[k] = META.sliders[k].base; $("sl_" + k).value = META.sliders[k].base; }
+      S.sliderIdx[key] = +e.target.value; pickGeom();
+    });
+  }
+}
+function pickGeom() {
+  const changed = META.sliderOrder.find(k => S.sliderIdx[k] !== META.sliders[k].base);
+  S.gid = changed ? META.gidOf[changed + ":" + S.sliderIdx[changed]] : 0;
+  render(true);
+}
+function bindControls() {
+  $("band_air").onclick = () => { S.band = 0; render(true); };
+  $("band_steel").onclick = () => { S.band = 1; render(true); };
+  $("reset_geom").onclick = () => { for (const k of META.sliderOrder) { S.sliderIdx[k] = META.sliders[k].base; $("sl_" + k).value = META.sliders[k].base; } S.band = 0; pickGeom(); };
+  $("s_I").oninput = (e) => { S.I = +e.target.value; render(); };
+  $("s_g").oninput = (e) => { S.gamma = +e.target.value; render(); };
+  $("s_t").oninput = (e) => { S.theta = +e.target.value; render(); };
+  $("s_n").oninput = (e) => { S.nLines = +e.target.value; render(); };
+  $("showB").onchange = (e) => { S.showB = e.target.checked; render(); };
+  $("follow").onchange = (e) => { S.follow = e.target.checked; render(); };
+  $("p_q").onclick = () => setGamma(0);
+  $("p_d").onclick = () => setGamma(90);
+  $("p_mtpa").onclick = () => setGamma(mtpa(S.gid, S.band, Math.max(S.I, 1))[0]);
+  $("play").onclick = () => { S.playing = !S.playing; $("play").textContent = S.playing ? "Pause" : "Play"; if (S.playing) tick(); };
+  window.addEventListener("keydown", (e) => { if (e.code === "Space" && e.target === document.body) { e.preventDefault(); $("play").click(); } });
+  window.addEventListener("resize", () => render());
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => render());
+  new MutationObserver(() => render()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+}
+function setGamma(g) { S.gamma = Math.round(g * 2) / 2; $("s_g").value = S.gamma; render(); }
+let last = 0;
+function tick(ts) {
+  if (!S.playing) return;
+  if (ts && last) S.theta = (S.theta + (ts - last) * 0.03) % 360;      // 30 electrical deg per second
+  last = ts || 0; $("s_t").value = S.theta; render(); requestAnimationFrame(tick);
+}
+
+// ------------------------------------------------------------------ render
+let busy = false;
+async function render(geomChanged) {
+  if (busy && !geomChanged) return;
+  busy = true;
+  try {                                           // finally: one failed frame must not freeze every later one
+    const g = await loadGeom(S.gid);
+    blendField(g);
+    const thp = S.theta - 120 * Math.floor(S.theta / 120), frame = 30 * Math.floor(S.theta / 120);
+    const rotorDeg = thp / META.polePairs + META.axisA - 90 / META.polePairs;
+    drawGL(g, rotorDeg, frame);
+    drawOverlay(rotorDeg + frame);
+    updateText();
+    drawPhaseChart(); drawTorqueChart();
+  } finally { busy = false; }
+}
+function fmt(x, d) { return (x < 0 ? "−" : "") + Math.abs(x).toFixed(d); }
+function updateText() {
+  for (const key of META.sliderOrder) {
+    const sl = META.sliders[key], i = S.sliderIdx[key], el = $("vl_" + key);
+    el.textContent = `${sl.stops[i]} ${sl.unit}`; el.classList.toggle("changed", i !== sl.base);
+  }
+  $("band_air").setAttribute("aria-pressed", S.band === 0); $("band_steel").setAttribute("aria-pressed", S.band === 1);
+  const [d, q] = idq();
+  $("v_I").textContent = `${S.I.toFixed(1)} A · ${Math.round(S.I * META.turns)} A-turns`;
+  $("v_g").textContent = `${S.gamma.toFixed(1)}°`;
+  $("v_t").textContent = `${S.theta.toFixed(0)}° el · ${(S.theta / META.polePairs).toFixed(1)}° mech`;
+  $("v_n").textContent = `${S.nLines} per span`;
+  const [mg] = mtpa(S.gid, S.band, Math.max(S.I, 1));
+  $("p_q").setAttribute("aria-pressed", S.gamma === 0); $("p_d").setAttribute("aria-pressed", S.gamma === 90);
+  $("p_mtpa").setAttribute("aria-pressed", Math.abs(S.gamma - Math.round(mg * 2) / 2) < 0.26);
+  $("p_mtpa").textContent = `Best angle (MTPA, ${mg.toFixed(1)}°)`;
+  const T = scalAt("T", S.gid, S.band, S.I, S.gamma, S.theta), Tm = scalMean("T", S.gid, S.band, S.I, S.gamma);
+  const Tref = scalMean("T", 0, 0, S.I, S.gamma);
+  $("r_t").textContent = fmt(T, 3); $("r_tm").textContent = fmt(Tm, 3);
+  $("r_vs").textContent = S.I < 0.5 ? "–" : (S.gid === 0 && S.band === 0 ? "first pass" : `${Tm >= Tref ? "+" : "−"}${Math.abs(100 * (Tm / Tref - 1)).toFixed(1)} %`);
+  $("r_pd").textContent = fmt(1e3 * scalMean("psi_d", S.gid, S.band, S.I, S.gamma), 2);
+  $("r_pq").textContent = fmt(1e3 * scalMean("psi_q", S.gid, S.band, S.I, S.gamma), 2);
+  $("r_pm").textContent = `magnets alone ${fmt(1e3 * scalMean("psi_d", S.gid, S.band, 0, 0), 2)} mWb`;
+  $("r_i").textContent = S.I.toFixed(1);
+  $("r_idq").innerHTML = `i<sub>d</sub> ${fmt(d, 1)}, i<sub>q</sub> ${fmt(q, 1)} A`;
+  $("maptag").innerHTML = `${S.band ? "band filled with steel" : "air band"} · ${S.I.toFixed(1)} A at ${S.gamma.toFixed(1)}°<br>θe ${S.theta.toFixed(0)}°`;
+  $("rampbar").style.background = `linear-gradient(90deg, ${[0, 1, 2, 3, 4, 5].map(i => css("--ramp" + i)).join(",")})`;
+}
+
+// ------------------------------------------------------------------ start
+function footer() {
+  $("foot").innerHTML = META.footer.map(t => `<p>${t}</p>`).join("");
+}
+(async function start() {
+  try {
+    if (!gl) throw new Error("It needs WebGL 2, and this browser isn't offering it. In Brave, Chrome or Edge: Settings → System → " +
+      "'Use graphics acceleration when available' on, then restart the browser.");
+    if (typeof DecompressionStream === "undefined") throw new Error("It needs a browser from 2023 or later (it unpacks its data with DecompressionStream).");
+    initGL(); buildSliders(); bindControls(); footer();
+    const [mg] = mtpa(0, 0, 10); setGamma(mg);
+    await render(true);
+    $("status").hidden = true;
+  } catch (e) {
+    showProblem("The field map couldn't start.", e.message); console.error(e);
+  }
+})();
+</script>

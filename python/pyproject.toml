@@ -1,0 +1,35 @@
+[project]
+name = "python-to-femm"
+version = "0.1.0"
+description = "IPM synRM motor design: Python geometry (motorgeo) driving FEMM 5.0, the studies, an optimizer demo and the flux page"
+requires-python = "==3.13.*"
+dependencies = [
+    "numpy==2.5.4",
+    "scipy==1.18.1",
+    "pandas==3.0.6",
+    "matplotlib==3.11.2",
+    "shapely==2.2.0",
+    "ezdxf==1.4.5",
+    "gmsh==4.15.2",
+    "pymoo==0.6.2",
+    "pyfemm-qt",
+    "salib==1.6.0",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+# The rest of the old D:\dev\scripts lock, so the plotting stack doesn't move either
+constraint-dependencies = [
+    "contourpy==1.4.0", "pillow==12.3.0", "kiwisolver==1.5.1", "fonttools==4.67.0",
+    "cycler==0.12.1", "pyparsing==3.3.3", "python-dateutil==2.9.0.post0",
+    "packaging==26.3", "six==1.17.0", "tzdata==2026.5",
+]
+
+[tool.uv.sources]
+# FEMM 5.0's own binding, installed with FEMM. Editable, so it always matches the installed FEMM.
+pyfemm-qt = { path = "D:/Apps/femm-qt/pyfemm", editable = true }
+
+[tool.pytest.ini_options]
+markers = ["femm: needs FEMM 5.0 installed"]

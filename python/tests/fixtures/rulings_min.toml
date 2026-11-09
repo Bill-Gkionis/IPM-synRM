@@ -1,0 +1,34 @@
+# rulings_min.toml: the smallest rulings file that tests/test_rulings.py needs.
+#
+# It is a FIXTURE, not the project's rulings: the real file, rulings.toml, is written by the orchestration session (O-1),
+# and these three quantities are only there to show the format. One table per quantity. The dots in a table's name are
+# the nesting, and rulings.load() turns them back into one key: [rotor.bridge_outer] is the key "rotor.bridge_outer".
+# The tests change single lines of a copy of this file (the bridge's value, a status), so keep every line just as it is.
+#
+# For somebody who writes the real rulings.toml: every field below is required, and no other is allowed. `names` is reserved: a table that has a `names` key is always
+# taken for a ruling, never for a group, so a group such as [rotor] must not hold a table called [rotor.names] (the loader would take [rotor] for a ruling and say that it
+# lacks value, unit, status, source and step). rulings.py's docstring has the whole format.
+
+[rotor.bridge_outer]
+value  = 1.4
+unit   = "mm"
+status = "assumed"                  # "assumed" or "ruled"
+source = "OnShape Bridge_Thickness; motorgeo Params.bridge"
+step   = "OP-1"                     # the step that rules it
+names  = { onshape = "Bridge_Thickness", motorgeo = "bridge" }
+
+[stator.slots]
+value  = 36
+unit   = ""
+status = "ruled"
+source = "the machine is 36 slots / 8 poles (hub: Quick facts)"
+step   = "EM-1"
+names  = { motorgeo = "slots" }
+
+[rotor.steel]
+value  = "M-19"
+unit   = ""
+status = "ruled"
+source = "the lamination steel (hub: Quick facts)"
+step   = "EM-1"
+names  = {}

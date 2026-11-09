@@ -1,0 +1,42 @@
+# config.toml: the one place that names this PC's programs and folders. paths.py reads it, and every script asks
+# paths.py (paths.tool("gmsh"), paths.path("out"), paths.setting("femm", "workers")); no script types a drive path.
+#
+# Two things to know about the format (TOML):
+#   * Write a Windows path in SINGLE quotes. Single quotes make a literal string, where a backslash is only a backslash.
+#     In "double quotes" the same text would start an escape sequence and the file would not load.
+#   * A path that is not absolute (no drive letter) starts at this folder, the project folder (the one that holds paths.py).
+#
+# Change a line here when a program moves or is installed again; nothing else needs to change.
+# `uv run python paths.py` lists every name below and says which tool it cannot find.
+
+[tools]
+# The programs. The folder or file must exist (tests/test_paths.py checks every line).
+femm      = 'D:\Apps\femm-qt\bin'         # FEMM 5.0's folder: femm_session starts femm_headlessw.exe from it
+# The CalculiX 2.23 zip has no plain ccx.exe: ccx_static.exe is the only 2.23 build that runs alone, and it solves with SPOOLES.
+ccx       = 'D:\Apps\CalculiX\2.23\calculix_2.23_4win\ccx_static.exe'
+cgx       = 'D:\Apps\CalculiX\2.23\calculix_2.23_4win\cgx_STATIC.exe'
+gmsh      = 'D:\Apps\Gmsh\4.15.2\gmsh-4.15.2-Windows64\gmsh.exe'
+prepomax  = 'D:\Apps\PrePoMax\3.0.0\PrePoMax v3.0.0\PrePoMax.exe'
+elmer     = 'D:\Apps\Elmer\26.2-devel-11c118114\elmerfem-nompi-devel-26.2-11c118114-20260917_Windows-AMD64\bin\ElmerSolver.exe'
+elmergrid = 'D:\Apps\Elmer\26.2-devel-11c118114\elmerfem-nompi-devel-26.2-11c118114-20260917_Windows-AMD64\bin\ElmerGrid.exe'
+matlab    = 'D:\Apps\MATLAB\bin\matlab.exe'
+
+[paths]
+# Folders and files. They need not exist yet (a script makes out\ the first time it writes there).
+out           = 'out'                                       # what the scripts write (git ignores it)
+rulings       = 'rulings.toml'                              # the rulings file that rulings.py reads; the orchestration session (O-1) writes it, so it is not there yet
+femm42_out    = 'femm42-out'                                # FEMM 4.2's outputs of 2026-10-28, read only (inside this folder since 2026-11-05)
+reference_fem = 'reference\IPM synRM analysis.FEM'          # the hand-drawn model, byte for byte (the committed one with the rotor turned 67.5 deg)
+simulink_plant      = 'reference\Improved_plant.slx'        # the motor's Simulink plant, byte for byte from IPM-synRM; check_tools only ever copies it
+motor_structure_mat = 'reference\motor structure.mat'       # the parameters that plant needs (the workspace variables it is loaded with)
+dxf_rotor           = 'reference\Rotor.DXF'                 # the rotor as the CAD exported it on 2026-01-13, byte for byte, read only: no air band, the 16 magnet slots only
+dxf_rotor_with_band = 'reference\SynRM rotor.DXF'           # the rotor as the CAD last exported it (2026-01-22), byte for byte, read only: it has the air band (16 pockets beside the slots), removed in memory
+dxf_stator          = 'reference\Stator_refined.DXF'        # the stator as the CAD exported it (2026-01-13), byte for byte, read only
+femm_matlib   = 'D:\Apps\femm-qt\bin\matlib.dat'            # FEMM 5.0's material library
+vault_figures = '../docs/figures'   # where the notes embed figures from
+                                                            # (a run copies figures here only when asked, with MOTOR_FIGURES_DIR=vault; unset, nothing goes into the notes' folder)
+
+[femm]
+# How FEMM runs are made (read with paths.setting("femm", "workers")).
+workers  = 8                  # at most 8 FEMMs at once: 10 made the desktop stutter on 2026-10-28
+priority = 'below_normal'     # the Windows priority class of the scripts and of the FEMMs they start

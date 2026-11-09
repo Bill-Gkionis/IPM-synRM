@@ -1,0 +1,2 @@
+# The flux page is about 17 MB of embedded data, so git stores it but never diffs it.
+pages/*.html binary

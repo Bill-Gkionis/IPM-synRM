@@ -1,0 +1,463 @@
+study,quantity,femm42,femm50,delta_pct,verdict,kind,limit_pct,plain_pct,n,n_flagged,n_plain_flagged,note
+not FEMM: identical,check_geometry: regions,40,40,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: centre rib [mm],1.5,1.5,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: q-rib [mm],1.794,1.794,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: outer bridge [mm],1.4,1.4,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_geometry: web, thinnest point [mm]",1.46,1.46,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: tooth [mm],3.969,3.969,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: yoke [mm],5.698,5.698,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: magnet area [mm2],261.57,261.57,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: winding factor kw1,0.9452,0.9452,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_geometry: DXF round trip, worst [%]",0.03,0.03,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: phase axis A [deg mech],65,65,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: phase axis B [deg mech],5,5,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: phase axis C [deg mech],35,35,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_vs_fem: stator steel area, motorgeo against .FEM [%]",-0.009,-0.009,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_vs_fem: rotor steel area [%],0,-0,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_vs_fem: magnet area [%],0,0,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_vs_fem: slot area, motorgeo [mm2]",54.127,54.127,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_vs_fem: slot area, .FEM [mm2]",54.152,54.152,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_vs_fem: magnet direction 1, .FEM [deg]",170.5,170.5,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,"check_vs_fem: magnet direction 2, .FEM [deg]",305.5,305.5,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: v_half_deg 55 is rejected,yes,yes,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,check_geometry: mag_x 38.4 is rejected,yes,yes,,identical,exact,,,1,0,0,"README, 10-28"
+not FEMM: identical,file equations.txt,bytes,bytes,,identical,exact,,,1,0,0,
+not FEMM: identical,file ipm_sector.msh,bytes,bytes,,identical,exact,,,1,0,0,
+not FEMM: identical,file sector.png (pixels that differ),0,0,,identical,exact,,,1,0,0,"of 1,223,040"
+not FEMM: identical,file ipm_full.dxf (lines and arcs that differ),0,0,,identical,exact,,,1,0,0,"772 entities; only dates, ids and the order of two housekeeping objects differ in the text"
+not FEMM: identical,file check_vs_fem.png (pixels that differ),0,850,,DIFFERS,exact,,,1,0,0,"of 1,901,250; all inside x 1427-1576, y 119-679"
+mesh: nodes and triangles,"nodes, coarse mesh, the default model",11644,9580,-17.7258674,info,info,,-17.7258674,1,0,0,
+mesh: nodes and triangles,"triangles, coarse mesh, the default model",22278,18146,-18.54744591,info,info,,-18.54744591,1,0,0,
+mesh: nodes and triangles,"nodes, fine mesh (smart mesh on), the default model",27939,17934,-35.81015784,info,info,,-35.81015784,1,0,0,
+mesh: nodes and triangles,"triangles, fine mesh (smart mesh on), the default model",54660,34758,-36.41053787,info,info,,-36.41053787,1,0,0,
+mesh: nodes and triangles,"nodes, the hand-drawn full model (360 deg), one position",91343,58963,-35.44880286,info,info,,-35.44880286,1,0,0,
+mesh: nodes and triangles,"triangles, the hand-drawn full model (360 deg), one position",182452,117723,-35.47727622,info,info,,-35.47727622,1,0,0,
+mesh: nodes and triangles,"mean triangle area in Air, coarse [mm2]",0.07578950997,0.07397823302,-2.389878163,info,info,,-2.389878163,1,0,0,
+mesh: nodes and triangles,"mean triangle area in Coil, coarse [mm2]",0.1461998841,0.1881239776,28.67587327,info,info,,28.67587327,1,0,0,
+mesh: nodes and triangles,"mean triangle area in M-19 Steel, coarse [mm2]",0.1759113237,0.2223022098,26.3717452,info,info,,26.3717452,1,0,0,
+mesh: nodes and triangles,"mean triangle area in N45, coarse [mm2]",0.02179007094,0.02667972374,22.43982048,info,info,,22.43982048,1,0,0,
+mesh: nodes and triangles,"nodes of the coarse mesh in the old files, against the README's 11,644",11644,11644,,identical,exact,,,1,0,0,"README, 10-28"
+mesh: nodes and triangles,"nodes of the fine mesh in the old files, against the README's 27,939",27939,27939,,identical,exact,,,1,0,0,"README, 10-28"
+mesh: nodes and triangles,"nodes, flux explorer, the reference design (rotor 0)",11644,9580,-17.7258674,info,info,,-17.7258674,1,0,0,
+mesh: nodes and triangles,"nodes, flux explorer, smallest of the 17 rotors",11491,9536,-17.01331477,info,info,,-17.01331477,1,0,0,
+mesh: nodes and triangles,"nodes, flux explorer, largest of the 17 rotors",12005,9716,-19.06705539,info,info,,-19.06705539,1,0,0,
+mesh: nodes and triangles,"nodes, flux explorer, mean of the 17 rotors",11789.88235,9605.176471,-18.53034506,info,info,,-18.53034506,1,0,0,
+"check_femm, coarse mesh",id=+0 iq=0: psi_d [mWb],11.941,11.991,0.4187253999,ok,flux,2,0.4187253999,1,0,0,
+"check_femm, coarse mesh",id=+0 iq=0: psi_q [mWb],0.023,0.031,0.6699606398,ok,flux,2,34.7826087,1,0,1,psi_q at no load should be 0: judged against psi_d
+"check_femm, coarse mesh",id=+0 iq=10: T_age [N.m],0.8061,0.8087,0.3225406277,ok,mean_torque,2,0.3225406277,1,0,0,
+"check_femm, coarse mesh",id=+0 iq=10: T_wst [N.m],0.8059,0.8085,0.3226206725,ok,mean_torque,2,0.3226206725,1,0,0,
+"check_femm, coarse mesh",id=-6 iq=8: T_age [N.m],0.911,0.9104,-0.06586169045,ok,mean_torque,2,-0.06586169045,1,0,0,
+"check_femm, coarse mesh",id=+6 iq=8: T_age [N.m],0.3886,0.3944,1.492537313,ok,mean_torque,2,1.492537313,1,0,0,
+check_femm --fine (against the barrier study's rows),no load: psi_d [mWb],11.99941168,12.03162123,0.268426108,ok,flux,1,0.268426108,1,0,0,
+check_femm --fine (against the barrier study's rows),no load: psi_q [mWb],0.02337241889,0.03137529528,0.6669390641,ok,flux,1,34.24068527,1,0,1,
+check_femm --fine (against the barrier study's rows),iq = 10 A: psi_d [mWb],12.09204672,12.12165327,0.244843138,ok,flux,1,0.244843138,1,0,0,
+check_femm --fine (against the barrier study's rows),iq = 10 A: psi_q [mWb],19.54975276,19.5351691,-0.07459770967,ok,flux,1,-0.07459770967,1,0,0,
+check_femm --fine (against the barrier study's rows),iq = 10 A: T_age [N.m],0.8064851327,0.8082279811,0.21610422,ok,mean_torque,1,0.21610422,1,0,0,
+check_femm --fine (against the barrier study's rows),iq = 10 A: T_wst [N.m],0.8059795045,0.8081742063,0.2723024339,ok,mean_torque,1,0.2723024339,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"example.py: mean torque, 30 positions, 10 A on the q axis [N.m]",,0.729,,info,info,,,1,0,0,"FEMM 4.2's fine-mesh mean torque for these currents (barrier study, 6 positions): 0.7286"
+no FEMM 4.2 record (FEMM 5.0 numbers only),"example.py: torque ripple, peak to peak [N.m]",,0.158,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: baseline: mean torque [N.m],,0.7288991799,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: baseline: torque ripple [N.m],,0.1578536001,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: mag_y 5.0: mean torque [N.m],,1.001341256,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: mag_y 5.0: torque ripple [N.m],,0.1436092985,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: web 1.2: mean torque [N.m],,0.6635388348,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),evaluate.py: web 1.2: torque ripple [N.m],,0.1432589481,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py, coarse mesh: mean torque [N.m]",,0.7315,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py, coarse mesh: torque ripple, peak to peak [N.m]",,0.1588,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py: harmonics 6, 12, 18, 24 of the same sweep [N.m]",,0.0256/0.0053/0.0555/0.0007,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py, fine mesh: mean torque [N.m]",,0.7347,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py, fine mesh: torque ripple, peak to peak [N.m]",,0.1532,,info,info,,,1,0,0,
+no FEMM 4.2 record (FEMM 5.0 numbers only),"mesh_study.py: harmonics 6, 12, 18, 24 of the same sweep [N.m]",,0.0255/0.0056/0.0521/0.0009,,info,info,,,1,0,0,
+barrier: summary.csv,with band: psi_pm_mWb,12.09468266,12.12682931,0.2657915747,ok,flux,1,0.2657915747,1,0,0,
+barrier: summary.csv,with band: psi_d0_mWb,12.0945565,12.12749286,0.2723238341,ok,flux,1,0.2723238341,1,0,0,
+barrier: summary.csv,with band: emf_peak_V_1000rpm,5.066208828,5.079674384,0.2657915747,ok,flux,1,0.2657915747,1,0,0,
+barrier: summary.csv,with band: emf_thd_pct,13.98573797,14.00200066,0.1162805022,ok,harmonic,10,0.1162805022,1,0,0,
+barrier: summary.csv,with band: ke_Vs_per_rad,0.04837873066,0.04850731725,0.2657915747,ok,flux,1,0.2657915747,1,0,0,
+barrier: summary.csv,with band: cogging_pp_mNm,23.98741967,25.68021851,7.057027686,ok,cogging,10,7.057027686,1,0,0,
+barrier: summary.csv,with band: mtpa_gamma_5A,18.87939834,18.84049913,-0.2060405296,ok,angle,1,-0.2060405296,1,0,0,
+barrier: summary.csv,with band: T_mtpa_5A,0.3888798805,0.3899816348,0.2833148127,ok,mean_torque,1,0.2833148127,1,0,0,
+barrier: summary.csv,with band: T_q_5A,0.3630083751,0.3641681119,0.3194793577,ok,mean_torque,1,0.3194793577,1,0,0,
+barrier: summary.csv,with band: Ld_5A_mH,1.151441772,1.149527495,-0.1662504622,ok,flux,1,-0.1662504622,1,0,0,
+barrier: summary.csv,with band: Lq_5A_mH,2.156293079,2.154604516,-0.07830861414,ok,flux,1,-0.07830861414,1,0,0,
+barrier: summary.csv,with band: saliency_5A,1.872689641,1.874339262,0.08808829523,ok,flux,1,0.08808829523,1,0,0,
+barrier: summary.csv,with band: mtpa_gamma_10A,28.10514697,28.03183025,-0.2608658062,ok,angle,1,-0.2608658062,1,0,0,
+barrier: summary.csv,with band: T_mtpa_10A,0.8573774843,0.8592416278,0.2174238925,ok,mean_torque,1,0.2174238925,1,0,0,
+barrier: summary.csv,with band: T_q_10A,0.72857859,0.7307722822,0.3010920536,ok,mean_torque,1,0.3010920536,1,0,0,
+barrier: summary.csv,with band: Ld_10A_mH,1.125906276,1.124686407,-0.1083455214,ok,flux,1,-0.1083455214,1,0,0,
+barrier: summary.csv,with band: Lq_10A_mH,1.96179108,1.960147461,-0.08378153993,ok,flux,1,-0.08378153993,1,0,0,
+barrier: summary.csv,with band: saliency_10A,1.742410645,1.742839114,0.02459062428,ok,flux,1,0.02459062428,1,0,0,
+barrier: summary.csv,with band: mtpa_gamma_15A,32.79596132,32.72785426,-0.2076690481,ok,angle,1,-0.2076690481,1,0,0,
+barrier: summary.csv,with band: T_mtpa_15A,1.38040925,1.382561908,0.1559434916,ok,mean_torque,1,0.1559434916,1,0,0,
+barrier: summary.csv,with band: T_q_15A,1.099546132,1.10256794,0.2748232116,ok,mean_torque,1,0.2748232116,1,0,0,
+barrier: summary.csv,with band: Ld_15A_mH,1.102979459,1.102221491,-0.06872010326,ok,flux,1,-0.06872010326,1,0,0,
+barrier: summary.csv,with band: Lq_15A_mH,1.815711436,1.814202703,-0.08309323309,ok,flux,1,-0.08309323309,1,0,0,
+barrier: summary.csv,with band: saliency_15A,1.646187897,1.645951126,-0.01438301385,ok,flux,1,-0.01438301385,1,0,0,
+barrier: summary.csv,with band: mtpa_gamma_20A,36.0838732,35.99474062,-0.2470150184,ok,angle,1,-0.2470150184,1,0,0,
+barrier: summary.csv,with band: T_mtpa_20A,1.978732878,1.980978944,0.1135103366,ok,mean_torque,1,0.1135103366,1,0,0,
+barrier: summary.csv,with band: T_q_20A,1.486982768,1.489915461,0.1972244568,ok,mean_torque,1,0.1972244568,1,0,0,
+barrier: summary.csv,with band: Ld_20A_mH,1.077299208,1.076733633,-0.05249937042,ok,flux,1,-0.05249937042,1,0,0,
+barrier: summary.csv,with band: Lq_20A_mH,1.725782358,1.724250765,-0.08874774524,ok,flux,1,-0.08874774524,1,0,0,
+barrier: summary.csv,with band: saliency_20A,1.601952684,1.601371698,-0.03626741498,ok,flux,1,-0.03626741498,1,0,0,
+barrier: summary.csv,with band: T_mean_mtpa_10A,0.8577684364,0.8594535195,0.1964496504,ok,mean_torque,1,0.1964496504,1,0,0,
+barrier: summary.csv,with band: ripple_pp_Nm,0.160995578,0.1617195188,0.4496649894,ok,ripple,10,0.4496649894,1,0,0,
+barrier: summary.csv,with band: ripple_pct,18.76911893,18.81655204,0.2527188736,ok,ripple,10,0.2527188736,1,0,0,
+barrier: summary.csv,with band: B1_gap_T,0.235104958,0.2357261131,0.2642033104,ok,flux,1,0.2642033104,1,0,0,
+barrier: summary.csv,with band: B_gap_thd_pct,39.45658603,39.47595613,0.04909219318,ok,harmonic,10,0.04909219318,1,0,0,
+barrier: summary.csv,with band: T_pm_10A_Nm,0.6401119635,0.6422514169,0.3342311272,ok,mean_torque,1,0.3342311272,1,0,0,
+barrier: summary.csv,no band: psi_pm_mWb,16.56632416,16.60730331,0.247364205,ok,flux,1,0.247364205,1,0,0,
+barrier: summary.csv,no band: psi_d0_mWb,16.56614579,16.60822884,0.254030433,ok,flux,1,0.254030433,1,0,0,
+barrier: summary.csv,no band: emf_peak_V_1000rpm,6.939285637,6.956450945,0.247364205,ok,flux,1,0.247364205,1,0,0,
+barrier: summary.csv,no band: emf_thd_pct,13.92916691,13.96395677,0.2497626639,ok,harmonic,10,0.2497626639,1,0,0,
+barrier: summary.csv,no band: ke_Vs_per_rad,0.06626529663,0.06642921326,0.247364205,ok,flux,1,0.247364205,1,0,0,
+barrier: summary.csv,no band: cogging_pp_mNm,48.99423481,52.42887087,7.010286167,ok,cogging,10,7.010286167,1,0,0,
+barrier: summary.csv,no band: mtpa_gamma_5A,14.32676897,14.27933886,-0.3310593781,ok,angle,1,-0.3310593781,1,0,0,
+barrier: summary.csv,no band: T_mtpa_5A,0.5161012746,0.5174450905,0.2603783329,ok,mean_torque,1,0.2603783329,1,0,0,
+barrier: summary.csv,no band: T_q_5A,0.497625216,0.4990600668,0.2883396493,ok,mean_torque,1,0.2883396493,1,0,0,
+barrier: summary.csv,no band: Ld_5A_mH,1.198101038,1.196728205,-0.1145840916,ok,flux,1,-0.1145840916,1,0,0,
+barrier: summary.csv,no band: Lq_5A_mH,2.156105961,2.154796304,-0.06074181579,ok,flux,1,-0.06074181579,1,0,0,
+barrier: summary.csv,no band: saliency_5A,1.799602782,1.800572841,0.05390404129,ok,flux,1,0.05390404129,1,0,0,
+barrier: summary.csv,no band: mtpa_gamma_10A,22.87261071,22.82053239,-0.2276885581,ok,angle,1,-0.2276885581,1,0,0,
+barrier: summary.csv,no band: T_mtpa_10A,1.125343036,1.1274468,0.1869442515,ok,mean_torque,1,0.1869442515,1,0,0,
+barrier: summary.csv,no band: T_q_10A,1.001684418,1.004274279,0.2585506026,ok,mean_torque,1,0.2585506026,1,0,0,
+barrier: summary.csv,no band: Ld_10A_mH,1.179374864,1.178590373,-0.06651758204,ok,flux,1,-0.06651758204,1,0,0,
+barrier: summary.csv,no band: Lq_10A_mH,2.151843657,2.150181276,-0.07725379025,ok,flux,1,-0.07725379025,1,0,0,
+barrier: summary.csv,no band: saliency_10A,1.824562929,1.82436691,-0.01074335443,ok,flux,1,-0.01074335443,1,0,0,
+barrier: summary.csv,no band: mtpa_gamma_15A,27.73453949,27.67864773,-0.2015240124,ok,angle,1,-0.2015240124,1,0,0,
+barrier: summary.csv,no band: T_mtpa_15A,1.864886455,1.86770818,0.1513081412,ok,mean_torque,1,0.1513081412,1,0,0,
+barrier: summary.csv,no band: T_q_15A,1.515860744,1.51925403,0.223852099,ok,mean_torque,1,0.223852099,1,0,0,
+barrier: summary.csv,no band: Ld_15A_mH,1.161145172,1.160414623,-0.06291625808,ok,flux,1,-0.06291625808,1,0,0,
+barrier: summary.csv,no band: Lq_15A_mH,2.137200945,2.135337137,-0.08720790198,ok,flux,1,-0.08720790198,1,0,0,
+barrier: summary.csv,no band: saliency_15A,1.840597539,1.840150146,-0.02430693692,ok,flux,1,-0.02430693692,1,0,0,
+barrier: summary.csv,no band: mtpa_gamma_20A,31.20583339,31.16082215,-0.1442398131,ok,angle,1,-0.1442398131,1,0,0,
+barrier: summary.csv,no band: T_mtpa_20A,2.732917453,2.735900276,0.1091442829,ok,mean_torque,1,0.1091442829,1,0,0,
+barrier: summary.csv,no band: T_q_20A,2.002943676,2.007420892,0.2235317719,ok,mean_torque,1,0.2235317719,1,0,0,
+barrier: summary.csv,no band: Ld_20A_mH,1.145184955,1.144386534,-0.06971987768,ok,flux,1,-0.06971987768,1,0,0,
+barrier: summary.csv,no band: Lq_20A_mH,2.037660644,2.035634605,-0.09942966193,ok,flux,1,-0.09942966193,1,0,0,
+barrier: summary.csv,no band: saliency_20A,1.779328863,1.778799859,-0.02973051232,ok,flux,1,-0.02973051232,1,0,0,
+barrier: summary.csv,no band: T_mean_mtpa_10A,1.124863538,1.126908869,0.1818292282,ok,mean_torque,1,0.1818292282,1,0,0,
+barrier: summary.csv,no band: ripple_pp_Nm,0.2054997483,0.2068947282,0.6788231477,ok,ripple,10,0.6788231477,1,0,0,
+barrier: summary.csv,no band: ripple_pct,18.26886029,18.35949062,0.4960918795,ok,ripple,10,0.4960918795,1,0,0,
+barrier: summary.csv,no band: B1_gap_T,0.3219313683,0.3227297434,0.2479954509,ok,flux,1,0.2479954509,1,0,0,
+barrier: summary.csv,no band: B_gap_thd_pct,39.15360296,39.2049511,0.1311453699,ok,harmonic,10,0.1311453699,1,0,0,
+barrier: summary.csv,no band: T_pm_10A_Nm,0.915824152,0.9184412248,0.2857614941,ok,mean_torque,1,0.2857614941,1,0,0,
+barrier: the README's headline,with band psi_pm [mWb],12.09,12.09,,identical,exact,,,1,0,0,"README, 10-28, against the old summary.csv"
+barrier: the README's headline,with band T at 10 A MTPA [N.m],0.857,0.857,,identical,exact,,,1,0,0,"README, 10-28, against the old summary.csv"
+barrier: the README's headline,no band psi_pm [mWb],16.57,16.57,,identical,exact,,,1,0,0,"README, 10-28, against the old summary.csv"
+barrier: the README's headline,no band T at 10 A MTPA [N.m],1.125,1.125,,identical,exact,,,1,0,0,"README, 10-28, against the old summary.csv"
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_a at 120 rotor positions: median |delta|",,,0.2156219992,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_a at 120 rotor positions: p95 |delta|",,,0.2644904674,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_a at 120 rotor positions: max |delta|",,,0.2684513706,ok,flux,1,,120,0,4,% of the waveform's peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_d at 120 rotor positions: median |delta|",,,0.2702420304,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_d at 120 rotor positions: p95 |delta|",,,0.2847787199,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_d at 120 rotor positions: max |delta|",,,0.2872678425,ok,flux,1,,120,0,0,% of the no-load flux linkage
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_q at 120 rotor positions: median |delta|",,,0.05268516605,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_q at 120 rotor positions: p95 |delta|",,,0.06420101529,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: psi_q at 120 rotor positions: max |delta|",,,0.06561580002,ok,flux,1,,120,0,120,% of the no-load flux linkage
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: torque at 120 rotor positions (cogging): median |delta|",,,1.338935817,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: torque at 120 rotor positions (cogging): p95 |delta|",,,3.727459813,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, no load: torque at 120 rotor positions (cogging): max |delta|",,,4.254124418,ok,cogging,10,,120,0,21,% of the curve's peak-to-peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, cogging: torque at 41 rotor positions: median |delta|",,,2.319192037,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, cogging: torque at 41 rotor positions: p95 |delta|",,,4.080210179,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, cogging: torque at 41 rotor positions: max |delta|",,,4.220680173,ok,cogging,10,,41,0,9,% of the curve's peak-to-peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: mean torque, 52 (I, gamma) points: median |delta|",,,0.2083127597,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: mean torque, 52 (I, gamma) points: p95 |delta|",,,0.3264648173,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: mean torque, 52 (I, gamma) points: max |delta|",,,0.9968241827,ok,mean_torque,1,,52,0,4,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_d, 52 points: median |delta|",,,0.6408464702,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_d, 52 points: p95 |delta|",,,1.218192788,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_d, 52 points: max |delta|",,,1.307669244,FLAG,flux,1,,52,18,18,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_q, 52 points: median |delta|",,,0.07683275471,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_q, 52 points: p95 |delta|",,,0.1724929333,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: psi_q, 52 points: max |delta|",,,0.4456981882,ok,flux,1,,52,0,4,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: torque at 312 single rotor positions: median |delta|",,,0.1889610292,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: torque at 312 single rotor positions: p95 |delta|",,,0.4356014615,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","with band, torque vs current angle: torque at 312 single rotor positions: max |delta|",,,1.590873642,FLAG,mean_torque,1,,312,2,18,one position: includes the ripple
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_a at 120 rotor positions: median |delta|",,,0.2026443667,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_a at 120 rotor positions: p95 |delta|",,,0.2402169071,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_a at 120 rotor positions: max |delta|",,,0.2470076457,ok,flux,1,,120,0,2,% of the waveform's peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_d at 120 rotor positions: median |delta|",,,0.250983564,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_d at 120 rotor positions: p95 |delta|",,,0.2642618315,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_d at 120 rotor positions: max |delta|",,,0.2669127024,ok,flux,1,,120,0,0,% of the no-load flux linkage
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_q at 120 rotor positions: median |delta|",,,0.0314065293,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_q at 120 rotor positions: p95 |delta|",,,0.04735489011,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: psi_q at 120 rotor positions: max |delta|",,,0.05040653271,ok,flux,1,,120,0,120,% of the no-load flux linkage
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: torque at 120 rotor positions (cogging): median |delta|",,,1.152897531,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: torque at 120 rotor positions (cogging): p95 |delta|",,,3.465172721,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, no load: torque at 120 rotor positions (cogging): max |delta|",,,4.007231434,ok,cogging,10,,120,0,19,% of the curve's peak-to-peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, cogging: torque at 41 rotor positions: median |delta|",,,2.491211122,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, cogging: torque at 41 rotor positions: p95 |delta|",,,3.552244687,info,cogging,10,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, cogging: torque at 41 rotor positions: max |delta|",,,3.578663118,ok,cogging,10,,41,0,6,% of the curve's peak-to-peak
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: mean torque, 52 (I, gamma) points: median |delta|",,,0.1901050784,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: mean torque, 52 (I, gamma) points: p95 |delta|",,,0.3439179009,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: mean torque, 52 (I, gamma) points: max |delta|",,,0.7522428614,ok,mean_torque,1,,52,0,4,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_d, 52 points: median |delta|",,,0.5130729771,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_d, 52 points: p95 |delta|",,,1.247793437,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_d, 52 points: max |delta|",,,1.301524089,FLAG,flux,1,,52,14,14,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_q, 52 points: median |delta|",,,0.07106613353,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_q, 52 points: p95 |delta|",,,0.2475743838,info,flux,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: psi_q, 52 points: max |delta|",,,0.4091813141,ok,flux,1,,52,0,4,mean over 6 rotor positions
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: torque at 312 single rotor positions: median |delta|",,,0.1770505984,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: torque at 312 single rotor positions: p95 |delta|",,,0.3792658609,info,mean_torque,1,,,,,
+"barrier: phase 1 (no load, cogging, torque vs current angle)","no band, torque vs current angle: torque at 312 single rotor positions: max |delta|",,,0.9640977986,ok,mean_torque,1,,312,0,19,one position: includes the ripple
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: current angle of the best torque at 10 A [deg],28.10514697,28.03183025,-0.2608658062,ok,angle,1,-0.2608658062,1,0,0,each run found its own; the torque is flat there
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque at 61 rotor positions: median |delta|,,,1.162337644,info,ripple,10,,,,,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque at 61 rotor positions: p95 |delta|,,,1.824577359,info,ripple,10,,,,,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque at 61 rotor positions: max |delta|,,,1.954270287,ok,ripple,10,,61,0,0,% of the curve's peak-to-peak
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: mean torque over the period [N.m],0.8577684364,0.8594535195,0.1964496504,ok,mean_torque,1,0.1964496504,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","with band: torque ripple, peak to peak [N.m]",0.160995578,0.1617195188,0.4496649894,ok,ripple,10,0.4496649894,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 6 per electrical cycle [N.m],0.03500271732,0.03479538486,-0.5923324651,ok,harmonic,10,-0.5923324651,1,0,0,68.2 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 12 per electrical cycle [N.m],0.003794484484,0.003878489066,2.213860212,ok,harmonic,10,2.213860212,1,0,0,7.4 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 18 per electrical cycle [N.m],0.05133255978,0.05193914449,1.181676346,ok,harmonic,10,1.181676346,1,0,0,100.0 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 24 per electrical cycle [N.m],0.0006646964583,0.001035293966,55.75439776,FLAG,harmonic,10,55.75439776,1,1,1,1.3 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 30 per electrical cycle [N.m],0.0003645629804,0.0003510058151,-3.718744351,ok,harmonic,10,-3.718744351,1,0,0,0.7 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: torque harmonic 36 per electrical cycle [N.m],0.003914109249,0.003914851921,0.01897424306,ok,harmonic,10,0.01897424306,1,0,0,7.6 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: mean psi_d over the period [mWb],6.757878778,6.811424606,0.7923466822,ok,flux,1,0.7923466822,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",with band: mean psi_q over the period [mWb],17.68941136,17.6863786,-0.01714450167,ok,flux,1,-0.01714450167,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: current angle of the best torque at 10 A [deg],22.87261071,22.82053239,-0.2276885581,ok,angle,1,-0.2276885581,1,0,0,each run found its own; the torque is flat there
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque at 61 rotor positions: median |delta|,,,1.105069452,info,ripple,10,,,,,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque at 61 rotor positions: p95 |delta|,,,1.917656346,info,ripple,10,,,,,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque at 61 rotor positions: max |delta|,,,2.144103886,ok,ripple,10,,61,0,0,% of the curve's peak-to-peak
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: mean torque over the period [N.m],1.124863538,1.126908869,0.1818292282,ok,mean_torque,1,0.1818292282,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","no band: torque ripple, peak to peak [N.m]",0.2054997483,0.2068947282,0.6788231477,ok,ripple,10,0.6788231477,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 6 per electrical cycle [N.m],0.04349709171,0.04332165434,-0.4033312494,ok,harmonic,10,-0.4033312494,1,0,0,65.5 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 12 per electrical cycle [N.m],0.005653923072,0.005654028037,0.001856494972,ok,harmonic,10,0.001856494972,1,0,0,8.5 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 18 per electrical cycle [N.m],0.06645385975,0.06765212088,1.803147515,ok,harmonic,10,1.803147515,1,0,0,100.0 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 24 per electrical cycle [N.m],0.001045785353,0.001435024523,37.21979561,FLAG,harmonic,10,37.21979561,1,1,1,1.6 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 30 per electrical cycle [N.m],0.0004291183415,0.0006893785119,60.64997583,FLAG,harmonic,10,60.64997583,1,1,1,0.6 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: torque harmonic 36 per electrical cycle [N.m],0.004516059488,0.004843576211,7.252267681,ok,harmonic,10,7.252267681,1,0,0,6.8 % of the largest harmonic
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: mean psi_d over the period [mWb],12.02422509,12.07786906,0.4461324561,ok,flux,1,0.4461324561,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)",no band: mean psi_q over the period [mWb],19.72489946,19.71901975,-0.0298085912,ok,flux,1,-0.0298085912,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","with band: all-q current, 10 A: torque [N.m]",0.8064851327,0.8082279811,0.21610422,ok,mean_torque,1,0.21610422,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","with band: all-q current, 10 A: psi_d [mWb]",12.09204672,12.12165327,0.244843138,ok,flux,1,0.244843138,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","with band: all-q current, 10 A: psi_q [mWb]",19.54975276,19.5351691,-0.07459770967,ok,flux,1,-0.07459770967,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","no band: all-q current, 10 A: torque [N.m]",1.0945482,1.096443416,0.173150537,ok,mean_torque,1,0.173150537,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","no band: all-q current, 10 A: psi_d [mWb]",16.59296317,16.63339318,0.243657555,ok,flux,1,0.243657555,1,0,0,
+"barrier: phase 2 (ripple at the best current angle, snapshots)","no band: all-q current, 10 A: psi_q [mWb]",21.43122418,21.41730166,-0.06496374014,ok,flux,1,-0.06496374014,1,0,0,
+barrier: air-gap flux density,"noload, with band: radial flux density at 360 points: median |delta|",,,0.2180771509,info,flux,1,,,,,
+barrier: air-gap flux density,"noload, with band: radial flux density at 360 points: p95 |delta|",,,0.911876583,info,flux,1,,,,,
+barrier: air-gap flux density,"noload, with band: radial flux density at 360 points: max |delta|",,,1.83485569,FLAG,flux,1,,360,14,165,% of the waveform's peak
+barrier: air-gap flux density,"noload, with band: harmonic 3 of the radial flux density [T]",0.047159794,0.04743566778,0.5849766354,ok,harmonic,10,0.5849766354,1,0,0,20.1 % of the fundamental
+barrier: air-gap flux density,"noload, with band: harmonic 5 of the radial flux density [T]",0.05634670548,0.05638562543,0.06907226455,ok,harmonic,10,0.06907226455,1,0,0,24.0 % of the fundamental
+barrier: air-gap flux density,"noload, with band: harmonic 8 of the radial flux density [T]",0.02045478174,0.02078364852,1.607774555,ok,harmonic,10,1.607774555,1,0,0,8.7 % of the fundamental
+barrier: air-gap flux density,"noload, with band: harmonic 9 of the radial flux density [T]",0.02862701116,0.02855827264,-0.2401176808,ok,harmonic,10,-0.2401176808,1,0,0,12.2 % of the fundamental
+barrier: air-gap flux density,"noload, with band: harmonic 19 of the radial flux density [T]",0.02498656652,0.0249833244,-0.01297544872,ok,harmonic,10,-0.01297544872,1,0,0,10.6 % of the fundamental
+barrier: air-gap flux density,"noload, no band: radial flux density at 360 points: median |delta|",,,0.2431144885,info,flux,1,,,,,
+barrier: air-gap flux density,"noload, no band: radial flux density at 360 points: p95 |delta|",,,0.8242490516,info,flux,1,,,,,
+barrier: air-gap flux density,"noload, no band: radial flux density at 360 points: max |delta|",,,1.572106752,FLAG,flux,1,,360,13,162,% of the waveform's peak
+barrier: air-gap flux density,"noload, no band: harmonic 3 of the radial flux density [T]",0.06551854325,0.06597102266,0.6906127532,ok,harmonic,10,0.6906127532,1,0,0,20.4 % of the fundamental
+barrier: air-gap flux density,"noload, no band: harmonic 5 of the radial flux density [T]",0.07633307758,0.07637137207,0.05016763221,ok,harmonic,10,0.05016763221,1,0,0,23.7 % of the fundamental
+barrier: air-gap flux density,"noload, no band: harmonic 8 of the radial flux density [T]",0.02809494578,0.02855835473,1.649438839,ok,harmonic,10,1.649438839,1,0,0,8.7 % of the fundamental
+barrier: air-gap flux density,"noload, no band: harmonic 9 of the radial flux density [T]",0.0386025969,0.03853101676,-0.1854282898,ok,harmonic,10,-0.1854282898,1,0,0,12.0 % of the fundamental
+barrier: air-gap flux density,"noload, no band: harmonic 19 of the radial flux density [T]",0.03286599901,0.03287643712,0.03175959279,ok,harmonic,10,0.03175959279,1,0,0,10.2 % of the fundamental
+barrier: air-gap flux density,"qaxis, with band: radial flux density at 360 points: median |delta|",,,0.1300558208,info,flux,1,,,,,
+barrier: air-gap flux density,"qaxis, with band: radial flux density at 360 points: p95 |delta|",,,0.4826365232,info,flux,1,,,,,
+barrier: air-gap flux density,"qaxis, with band: radial flux density at 360 points: max |delta|",,,1.330410773,FLAG,flux,1,,360,2,71,% of the waveform's peak
+barrier: air-gap flux density,"qaxis, no band: radial flux density at 360 points: median |delta|",,,0.1562828623,info,flux,1,,,,,
+barrier: air-gap flux density,"qaxis, no band: radial flux density at 360 points: p95 |delta|",,,0.5006145026,info,flux,1,,,,,
+barrier: air-gap flux density,"qaxis, no band: radial flux density at 360 points: max |delta|",,,1.256625602,FLAG,flux,1,,360,2,55,% of the waveform's peak
+barrier: air-gap flux density,"mtpa, with band: radial flux density at 360 points: median |delta|",,,0.1758004717,info,flux,1,,,,,
+barrier: air-gap flux density,"mtpa, with band: radial flux density at 360 points: p95 |delta|",,,0.6064833941,info,flux,1,,,,,
+barrier: air-gap flux density,"mtpa, with band: radial flux density at 360 points: max |delta|",,,1.593010018,FLAG,flux,1,,360,5,108,% of the waveform's peak
+barrier: air-gap flux density,"mtpa, no band: radial flux density at 360 points: median |delta|",,,0.1718887262,info,flux,1,,,,,
+barrier: air-gap flux density,"mtpa, no band: radial flux density at 360 points: p95 |delta|",,,0.5966581466,info,flux,1,,,,,
+barrier: air-gap flux density,"mtpa, no band: radial flux density at 360 points: max |delta|",,,1.370293428,FLAG,flux,1,,360,4,77,% of the waveform's peak
+reference_open (magnet inside the band),no-load psi_d [mWb] (the old log: 19.18),19.18391861,19.19902097,0.07872404648,ok,flux,1,0.07872404648,1,0,0,the README says 19.18
+reference_open (magnet inside the band),best mean torque at 10 A [N.m],1.263777731,1.264639044,0.06815382877,ok,mean_torque,1,0.06815382877,1,0,0,the old log says 1.2638; the README says 1.266
+reference_open (magnet inside the band),current angle of the best torque [deg],22.5,22.5,0,identical,angle,1,0,1,0,0,from the 7.5-degree grid
+reference_open (magnet inside the band),no-load psi_a at 24 rotor positions: median |delta|,,,0.04845221555,info,flux,1,,,,,
+reference_open (magnet inside the band),no-load psi_a at 24 rotor positions: p95 |delta|,,,0.07739148538,info,flux,1,,,,,
+reference_open (magnet inside the band),no-load psi_a at 24 rotor positions: max |delta|,,,0.07936956044,ok,flux,1,,24,0,2,% of the waveform's peak
+reference_open (magnet inside the band),mean torque at 13 current angles: median |delta|,,,0.06815382877,info,mean_torque,1,,,,,
+reference_open (magnet inside the band),mean torque at 13 current angles: p95 |delta|,,,0.2386621968,info,mean_torque,1,,,,,
+reference_open (magnet inside the band),mean torque at 13 current angles: max |delta|,,,0.3232653758,ok,mean_torque,1,,13,0,1,
+reference_open (magnet inside the band),psi_d at 13 current angles: median |delta|,,,0.180808125,info,flux,1,,,,,
+reference_open (magnet inside the band),psi_d at 13 current angles: p95 |delta|,,,0.2694956148,info,flux,1,,,,,
+reference_open (magnet inside the band),psi_d at 13 current angles: max |delta|,,,0.2745612303,ok,flux,1,,13,0,0,
+reference_open (magnet inside the band),psi_q at 13 current angles: median |delta|,,,0.08593635199,info,flux,1,,,,,
+reference_open (magnet inside the band),psi_q at 13 current angles: p95 |delta|,,,0.09847612644,info,flux,1,,,,,
+reference_open (magnet inside the band),psi_q at 13 current angles: max |delta|,,,0.09885300369,ok,flux,1,,13,0,1,
+validate_full (slice against the full model),"hand-drawn 360, no load: phase-A flux linkage at 24 rotor positions: median |delta|",,,0.1860591703,info,flux,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, no load: phase-A flux linkage at 24 rotor positions: p95 |delta|",,,0.2779822968,info,flux,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, no load: phase-A flux linkage at 24 rotor positions: max |delta|",,,0.3070274622,ok,flux,1,,24,0,2,% of the peak
+validate_full (slice against the full model),"hand-drawn 360, 10 A: phase-A flux linkage at 24 rotor positions: median |delta|",,,0.1546964704,info,flux,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, 10 A: phase-A flux linkage at 24 rotor positions: p95 |delta|",,,0.2244367736,info,flux,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, 10 A: phase-A flux linkage at 24 rotor positions: max |delta|",,,0.25713507,ok,flux,1,,24,0,5,% of the peak
+validate_full (slice against the full model),"hand-drawn 360, 10 A: torque at 24 rotor positions: median |delta|",,,0.4053401621,info,mean_torque,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, 10 A: torque at 24 rotor positions: p95 |delta|",,,1.013314602,info,mean_torque,1,,,,,
+validate_full (slice against the full model),"hand-drawn 360, 10 A: torque at 24 rotor positions: max |delta|",,,1.040028083,FLAG,mean_torque,1,,24,2,13,% of the peak torque
+validate_full (slice against the full model),"hand-drawn 360, no load: torque at 24 rotor positions (cogging): median |delta|",,,5.944436511,info,cogging,10,,,,,
+validate_full (slice against the full model),"hand-drawn 360, no load: torque at 24 rotor positions (cogging): p95 |delta|",,,12.00165116,info,cogging,10,,,,,
+validate_full (slice against the full model),"hand-drawn 360, no load: torque at 24 rotor positions (cogging): max |delta|",,,12.71451497,FLAG,cogging,10,,24,6,21,% of the curve's peak-to-peak
+validate_full (slice against the full model),"hand-drawn 360: peak phase-A flux linkage, 10 A [mWb]",25.18598925,25.16889992,-0.06785251006,ok,flux,1,-0.06785251006,1,0,0,
+validate_full (slice against the full model),"hand-drawn 360: peak torque, 10 A [N.m]",0.9510954666,0.9522953425,0.1261572533,ok,mean_torque,1,0.1261572533,1,0,0,
+validate_full (slice against the full model),"hand-drawn 360: torque peak to peak, no load [N.m] (cogging)",0.04384928249,0.03982979655,-9.166594555,ok,cogging,10,-9.166594555,1,0,0,
+validate_full (slice against the full model),"motorgeo 90, no load: phase-A flux linkage at 24 rotor positions: median |delta|",,,0.2150143142,info,flux,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, no load: phase-A flux linkage at 24 rotor positions: p95 |delta|",,,0.2647297341,info,flux,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, no load: phase-A flux linkage at 24 rotor positions: max |delta|",,,0.2656624344,ok,flux,1,,24,0,2,% of the peak (FEMM 4.2's slice rows came from the script whose jobs shared file names: see README)
+validate_full (slice against the full model),"motorgeo 90, 10 A: phase-A flux linkage at 24 rotor positions: median |delta|",,,0.1182849121,info,flux,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, 10 A: phase-A flux linkage at 24 rotor positions: p95 |delta|",,,0.2303528804,info,flux,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, 10 A: phase-A flux linkage at 24 rotor positions: max |delta|",,,0.2507331171,ok,flux,1,,24,0,5,% of the peak (FEMM 4.2's slice rows came from the script whose jobs shared file names: see README)
+validate_full (slice against the full model),"motorgeo 90, 10 A: torque at 24 rotor positions: median |delta|",,,0.1428718759,info,mean_torque,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, 10 A: torque at 24 rotor positions: p95 |delta|",,,0.3028819612,info,mean_torque,1,,,,,
+validate_full (slice against the full model),"motorgeo 90, 10 A: torque at 24 rotor positions: max |delta|",,,0.3125070609,ok,mean_torque,1,,24,0,4,% of the peak torque (FEMM 4.2's slice rows came from the script whose jobs shared file names: see README)
+validate_full (slice against the full model),"motorgeo 90, no load: torque at 24 rotor positions (cogging): median |delta|",,,1.718604957,info,cogging,10,,,,,
+validate_full (slice against the full model),"motorgeo 90, no load: torque at 24 rotor positions (cogging): p95 |delta|",,,4.187960502,info,cogging,10,,,,,
+validate_full (slice against the full model),"motorgeo 90, no load: torque at 24 rotor positions (cogging): max |delta|",,,4.338041341,ok,cogging,10,,24,0,12,% of the curve's peak-to-peak (FEMM 4.2's slice rows came from the script whose jobs shared file names: see README)
+validate_full (slice against the full model),"motorgeo 90: peak phase-A flux linkage, 10 A [mWb]",24.98867487,24.99283666,0.01665470245,ok,flux,1,0.01665470245,1,0,0,
+validate_full (slice against the full model),"motorgeo 90: peak torque, 10 A [N.m]",0.9370311459,0.9386366306,0.1713373941,ok,mean_torque,1,0.1713373941,1,0,0,
+validate_full (slice against the full model),"motorgeo 90: torque peak to peak, no load [N.m] (cogging)",0.02289551257,0.02470929075,7.921981121,ok,cogging,10,7.921981121,1,0,0,
+validate_full (slice against the full model),"slice, no load: largest |psi_a difference| in the 11 rows FEMM 4.2 had to re-solve, and in the other 13 [% of peak]",0.2656624344,0.2580662132,-2.859350909,info,info,,-2.859350909,1,0,0,femm42 column: the other rows; femm50 column: the re-solved ones. Neither set stands out
+validate_full (slice against the full model),"nodes, hand-drawn model, mean over the 48 solves",90611.91667,58376.79167,-35.57492898,info,info,,-35.57492898,1,0,0,
+validate_full (slice against the full model),"seconds per solve, hand-drawn 360 (8 workers)",263.5096945,2.907993498,-98.89643776,info,info,,-98.89643776,1,0,0,
+validate_full (slice against the full model),"seconds per solve, motorgeo 90 (8 workers)",16.2729141,0.7009571646,-95.69249146,info,info,,-95.69249146,1,0,0,
+worker_scaling,seconds for 48 solves on 1 workers,94.86,13.48,-85.78958465,info,info,,-85.78958465,1,0,0,
+worker_scaling,seconds for 48 solves on 2 workers,49.78,7.12,-85.6970671,info,info,,-85.6970671,1,0,0,
+worker_scaling,speed-up on 2 workers,1.905584572,1.893258427,-0.6468432486,info,info,,-0.6468432486,1,0,0,
+worker_scaling,seconds for 48 solves on 4 workers,27.94,4.08,-85.39727989,info,info,,-85.39727989,1,0,0,
+worker_scaling,speed-up on 4 workers,3.395132427,3.303921569,-2.686518419,info,info,,-2.686518419,1,0,0,
+worker_scaling,seconds for 48 solves on 6 workers,20.31,3.01,-85.17971443,info,info,,-85.17971443,1,0,0,
+worker_scaling,speed-up on 6 workers,4.670605613,4.478405316,-4.115104406,info,info,,-4.115104406,1,0,0,
+worker_scaling,seconds for 48 solves on 8 workers,16.02,2.43,-84.83146067,info,info,,-84.83146067,1,0,0,
+worker_scaling,speed-up on 8 workers,5.921348315,5.547325103,-6.316521033,info,info,,-6.316521033,1,0,0,
+worker_scaling,seconds for 48 solves on 10 workers,14.85,2.33,-84.30976431,info,info,,-84.30976431,1,0,0,
+worker_scaling,speed-up on 10 workers,6.387878788,5.785407725,-9.431472991,info,info,,-9.431472991,1,0,0,
+worker_scaling,largest |T - T(1 worker)| over every worker count [N.m],0,0,,ok,must hold,0,,1,0,0,"the plan: bit-identical, so exactly 0"
+"optimize_demo: generation 0, row by row",the 8 candidates are the same designs,yes,yes,,identical,exact,,,1,0,0,
+"optimize_demo: generation 0, row by row",feasible in both runs,7,7,,identical,exact,,,1,0,0,
+"optimize_demo: generation 0, row by row",mean torque of the feasible candidates: median |delta|,,,0.0951522195,info,mean_torque,2,,,,,
+"optimize_demo: generation 0, row by row",mean torque of the feasible candidates: p95 |delta|,,,0.2915458702,info,mean_torque,2,,,,,
+"optimize_demo: generation 0, row by row",mean torque of the feasible candidates: max |delta|,,,0.334677101,ok,mean_torque,2,,7,0,0,
+"optimize_demo: generation 0, row by row",torque ripple of the feasible candidates: median |delta|,,,0.7637513497,info,ripple,10,,,,,
+"optimize_demo: generation 0, row by row",torque ripple of the feasible candidates: p95 |delta|,,,1.76702952,info,ripple,10,,,,,
+"optimize_demo: generation 0, row by row",torque ripple of the feasible candidates: max |delta|,,,1.944969685,ok,ripple,10,,7,0,0,
+"optimize_demo: generation 0, row by row",best current angle of the feasible candidates: median |delta|,,,0.623233273,info,angle,2,,,,,
+"optimize_demo: generation 0, row by row",best current angle of the feasible candidates: p95 |delta|,,,0.9004271546,info,angle,2,,,,,
+"optimize_demo: generation 0, row by row",best current angle of the feasible candidates: max |delta|,,,0.9521524712,ok,angle,2,,7,0,0,
+"optimize_demo: generation 1, row by row",the 8 candidates are the same designs,yes,yes,,identical,exact,,,1,0,0,
+"optimize_demo: generation 1, row by row",feasible in both runs,7,7,,identical,exact,,,1,0,0,
+"optimize_demo: generation 1, row by row",mean torque of the feasible candidates: median |delta|,,,0.1289255723,info,mean_torque,2,,,,,
+"optimize_demo: generation 1, row by row",mean torque of the feasible candidates: p95 |delta|,,,0.2066910447,info,mean_torque,2,,,,,
+"optimize_demo: generation 1, row by row",mean torque of the feasible candidates: max |delta|,,,0.2374496424,ok,mean_torque,2,,7,0,0,
+"optimize_demo: generation 1, row by row",torque ripple of the feasible candidates: median |delta|,,,1.498546296,info,ripple,10,,,,,
+"optimize_demo: generation 1, row by row",torque ripple of the feasible candidates: p95 |delta|,,,3.736652262,info,ripple,10,,,,,
+"optimize_demo: generation 1, row by row",torque ripple of the feasible candidates: max |delta|,,,3.901575931,ok,ripple,10,,7,0,0,
+"optimize_demo: generation 1, row by row",best current angle of the feasible candidates: median |delta|,,,0.5081858784,info,angle,2,,,,,
+"optimize_demo: generation 1, row by row",best current angle of the feasible candidates: p95 |delta|,,,5.54904796,info,angle,2,,,,,
+"optimize_demo: generation 1, row by row",best current angle of the feasible candidates: max |delta|,,,7.317555476,FLAG,angle,2,,7,1,1,
+optimize_demo: later generations (not row by row),generation 2: the same 8 designs in both runs?,,,,info,info,,,1,0,0,"no: selection depends on the torques, so the two searches part ways"
+optimize_demo: later generations (not row by row),generation 3: the same 8 designs in both runs?,,,,info,info,,,1,0,0,"no: selection depends on the torques, so the two searches part ways"
+optimize_demo: later generations (not row by row),generation 4: the same 8 designs in both runs?,,,,info,info,,,1,0,0,"no: selection depends on the torques, so the two searches part ways"
+optimize_demo: later generations (not row by row),generation 5: the same 8 designs in both runs?,,,,info,info,,,1,0,0,"no: selection depends on the torques, so the two searches part ways"
+optimize_demo: later generations (not row by row),generation 6: the same 8 designs in both runs?,,,,info,info,,,1,0,0,"no: selection depends on the torques, so the two searches part ways"
+optimize_demo: later generations (not row by row),best torque in generation 0 [N.m],1.081028035,1.082139294,0.1027965615,info,info,,0.1027965615,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 1 [N.m],1.055591173,1.056126943,0.05075545503,info,info,,0.05075545503,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 2 [N.m],1.029175579,1.093275679,6.228295876,info,info,,6.228295876,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 3 [N.m],1.081971207,1.078108353,-0.3570200988,info,info,,-0.3570200988,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 4 [N.m],1.190576307,1.090504168,-8.405352791,info,info,,-8.405352791,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 5 [N.m],1.191704197,1.106006647,-7.191176343,info,info,,-7.191176343,1,0,0,
+optimize_demo: later generations (not row by row),best torque in generation 6 [N.m],1.195883476,1.112240602,-6.994232725,info,info,,-6.994232725,1,0,0,
+optimize_demo: later generations (not row by row),best torque of all 56 evaluations [N.m],1.195883476,1.112240602,-6.994232725,info,info,,-6.994232725,1,0,0,
+"optimize_demo: generation 0, row by row","geometry numbers (ribs, bridge, web: no FEMM)",equal,equal,,identical,exact,,,1,0,0,
+"optimize_demo: generation 1, row by row","geometry numbers (ribs, bridge, web: no FEMM)",equal,equal,,identical,exact,,,1,0,0,
+"flux explorer: 2,040 states",torque T_age: median |delta|,,,0.1583812643,info,mean_torque,2,,,,,
+"flux explorer: 2,040 states",torque T_age: p95 |delta|,,,0.751929262,info,mean_torque,2,,,,,
+"flux explorer: 2,040 states",torque T_age: max |delta|,,,2.031789063,FLAG,mean_torque,2,,2040,2,384,"largest torque 3.290 N.m; worst rotors g10 air 2.03 %, g09 air 1.85 %, g05 air 1.84 %"
+"flux explorer: 2,040 states",flux linkage psi_d: median |delta|,,,0.4462901837,info,flux,2,,,,,
+"flux explorer: 2,040 states",flux linkage psi_d: p95 |delta|,,,1.174631884,info,flux,2,,,,,
+"flux explorer: 2,040 states",flux linkage psi_d: max |delta|,,,2.67695213,FLAG,flux,2,,2040,11,217,largest d or q flux linkage 40.92 mWb
+"flux explorer: 2,040 states",flux linkage psi_q: median |delta|,,,0.0721511975,info,flux,2,,,,,
+"flux explorer: 2,040 states",flux linkage psi_q: p95 |delta|,,,0.7336723748,info,flux,2,,,,,
+"flux explorer: 2,040 states",flux linkage psi_q: max |delta|,,,0.9656839286,ok,flux,2,,2040,0,360,largest d or q flux linkage 40.92 mWb
+"flux explorer: 2,040 states","phase flux linkages psi_a, psi_b, psi_c (3 values per state): median |delta|",,,0.06094295148,info,flux,2,,,,,
+"flux explorer: 2,040 states","phase flux linkages psi_a, psi_b, psi_c (3 values per state): p95 |delta|",,,0.3309585969,info,flux,2,,,,,
+"flux explorer: 2,040 states","phase flux linkages psi_a, psi_b, psi_c (3 values per state): max |delta|",,,0.5991228161,ok,flux,2,,6120,0,664,"% of the largest, 45.84 mWb"
+"flux explorer: 2,040 states",flux-linkage retries in the run,0,0,,identical,exact,,,1,0,0,
+"flux explorer: 2,040 states",states with a flux linkage of exactly 0,0,0,,identical,exact,,,1,0,0,
+flux explorer: 306 states at 120 deg,torque T_age: median |delta|,,,0.1481845454,info,mean_torque,2,,,,,
+flux explorer: 306 states at 120 deg,torque T_age: p95 |delta|,,,0.7402336113,info,mean_torque,2,,,,,
+flux explorer: 306 states at 120 deg,torque T_age: max |delta|,,,1.385578214,ok,mean_torque,2,,306,0,98,"largest torque 3.290 N.m; worst rotors g09 air 1.39 %, g10 air 1.13 %, g05 air 1.11 %"
+flux explorer: 306 states at 120 deg,flux linkage psi_d: median |delta|,,,0.4098618101,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,flux linkage psi_d: p95 |delta|,,,1.121890573,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,flux linkage psi_d: max |delta|,,,1.992295243,ok,flux,2,,306,0,26,largest d or q flux linkage 40.92 mWb
+flux explorer: 306 states at 120 deg,flux linkage psi_q: median |delta|,,,0.0710258327,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,flux linkage psi_q: p95 |delta|,,,0.7235172461,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,flux linkage psi_q: max |delta|,,,0.9517963767,ok,flux,2,,306,0,85,largest d or q flux linkage 40.92 mWb
+flux explorer: 306 states at 120 deg,"phase flux linkages psi_a, psi_b, psi_c (3 values per state): median |delta|",,,0.05691430965,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,"phase flux linkages psi_a, psi_b, psi_c (3 values per state): p95 |delta|",,,0.3193506572,info,flux,2,,,,,
+flux explorer: 306 states at 120 deg,"phase flux linkages psi_a, psi_b, psi_c (3 values per state): max |delta|",,,0.5691039829,ok,flux,2,,918,0,44,"% of the largest, 45.84 mWb"
+flux explorer: 306 states at 120 deg,flux-linkage retries in the run,0,0,,identical,exact,,,1,0,0,
+flux explorer: 306 states at 120 deg,states with a flux linkage of exactly 0,0,0,,identical,exact,,,1,0,0,
+materials: numbers that need no FEMM,current.json,182,182,,identical,exact,,,182,0,0,values equal / values compared
+materials: numbers that need no FEMM,thermal.json,128,128,,identical,exact,,,128,0,0,values equal / values compared
+materials: numbers that need no FEMM,structural.json,155,155,,identical,exact,,,155,0,0,values equal / values compared
+materials: magnetic.json (numbers read from solved fields),values compared / values that moved,235,61,-74.04255319,info,info,,-74.04255319,1,0,0,
+materials: magnetic.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): median |delta|",,,0.1580016625,info,flux,1,,,,,
+materials: magnetic.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): p95 |delta|",,,0.4822077564,info,flux,1,,,,,
+materials: magnetic.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): max |delta|",,,0.5492827964,ok,flux,1,,48,0,0,only the values that moved are listed here; the rest are equal
+materials: magnetic.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): median |delta|",,,4.574009834,info,tail,10,,,,,
+materials: magnetic.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): p95 |delta|",,,127.9208349,info,tail,10,,,,,
+materials: magnetic.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): max |delta|",,,228.2527047,FLAG,tail,10,,13,5,5,only the values that moved are listed here; the rest are equal
+materials: fields.json (numbers read from solved fields),values compared / values that moved,258,196,-24.03100775,info,info,,-24.03100775,1,0,0,
+materials: fields.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): median |delta|",,,0.07618132064,info,flux,1,,,,,
+materials: fields.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): p95 |delta|",,,0.3319307942,info,flux,1,,,,,
+materials: fields.json (numbers read from solved fields),"statistics over many triangles (medians, percentiles): max |delta|",,,0.620081601,ok,flux,1,,16,0,0,only the values that moved are listed here; the rest are equal
+materials: fields.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): median |delta|",,,6.143998607,info,tail,10,,,,,
+materials: fields.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): p95 |delta|",,,232.3169356,info,tail,10,,,,,
+materials: fields.json (numbers read from solved fields),"tail statistics (weakest triangles, areas below a level): max |delta|",,,1253.256013,FLAG,tail,10,,180,73,68,only the values that moved are listed here; the rest are equal
+materials: fields.json (numbers read from solved fields),noload_with_band: B_parallel_median_T,1.03037,1.02959,-0.07570096179,ok,flux,1,-0.07570096179,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_with_band: B_parallel_p5_T,0.999466,0.999642,0.01760940342,ok,flux,1,0.01760940342,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_with_band: B_parallel_p1_T,0.911679,0.895878,-1.733175822,ok,tail,10,-1.733175822,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_with_band: B_parallel_min_T,0.740594,0.723195,-2.349330402,ok,tail,10,-2.349330402,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_with_band: steel_B_p99_T,2.0792,2.07545,-0.1803578299,ok,flux,1,-0.1803578299,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_with_band: triangles in the magnets,3795,2499,-34.15019763,info,info,,-34.15019763,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: B_parallel_median_T,1.1872,1.18637,-0.06991239892,ok,flux,1,-0.06991239892,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: B_parallel_p5_T,1.12931,1.13029,0.08677865245,ok,flux,1,0.08677865245,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: B_parallel_p1_T,0.978706,0.975684,-0.308775056,ok,tail,10,-0.308775056,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: B_parallel_min_T,0.699787,0.667027,-4.681424491,ok,tail,10,-4.681424491,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: steel_B_p99_T,1.85782,1.86934,0.620081601,ok,flux,1,0.620081601,1,0,0,
+materials: fields.json (numbers read from solved fields),noload_no_band: triangles in the magnets,3795,2499,-34.15019763,info,info,,-34.15019763,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: B_parallel_median_T,0.997777,0.996817,-0.09621388346,ok,flux,1,-0.09621388346,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: B_parallel_p5_T,0.970821,0.972367,0.1592466582,ok,flux,1,0.1592466582,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: B_parallel_p1_T,0.872215,0.858486,-1.574038511,ok,tail,10,-1.574038511,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: B_parallel_min_T,0.589996,0.589226,-0.1305093594,ok,tail,10,-0.1305093594,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: steel_B_p99_T,2.09852,2.09357,-0.2358805253,ok,flux,1,-0.2358805253,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_with_band: triangles in the magnets,3795,2499,-34.15019763,info,info,,-34.15019763,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: B_parallel_median_T,1.14644,1.14585,-0.05146366142,ok,flux,1,-0.05146366142,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: B_parallel_p5_T,1.07847,1.07848,0.0009272395152,ok,flux,1,0.0009272395152,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: B_parallel_p1_T,0.907577,0.903678,-0.4296054219,ok,tail,10,-0.4296054219,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: B_parallel_min_T,0.583374,0.580664,-0.4645390436,ok,tail,10,-0.4645390436,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: steel_B_p99_T,1.92939,1.92706,-0.1207635574,ok,flux,1,-0.1207635574,1,0,0,
+materials: fields.json (numbers read from solved fields),mtpa_no_band: triangles in the magnets,3795,2499,-34.15019763,info,info,,-34.15019763,1,0,0,
+materials: numbers that need no FEMM,magnetic_m19_curve.csv,188,188,,identical,exact,,,188,0,0,values equal / values compared
+flux page,"src=""http... (scripts, images, frames loaded from the network)",,0,,ok,must hold,0,,1,0,0,
+flux page,"<link ... href=""http..."" (style sheets, fonts, icons from the network)",,0,,ok,must hold,0,,1,0,0,
+flux page,fetch( or XMLHttpRequest or import( or @import url(http,,0,,ok,must hold,0,,1,0,0,
+flux page,"any ""http://"" or ""https://"" at all in the page's code",,0,,ok,must hold,0,,1,0,0,
+flux page,the footer names FEMM 4.2,no,no,,identical,exact,,,1,0,0,
+flux page,the footer names FEMM 5.0,yes,yes,,identical,exact,,,1,0,0,"Every picture comes from FEMM 5.0.20261101 solves of the first-pass rotor (2,346 solves, 2026-11-04): 90° periodic slice, coarse mesh (9,580 nodes), N"
+flux page,the footer's first sentence,,"Every picture comes from FEMM 5.0.20261101 solves of the first-pass rotor (2,346 solves, 2026-11-04): 90° periodic slice, coarse mesh (9,580 nodes), N45 magnets as drawn in the hand-drawn .FEM, M-19 steel, 10 turns per coil side (placeholder), 20 mm deep.",,info,info,,,1,0,0,
+flux page,the footer's number of solves,"2,346","2,346",,identical,exact,,,1,0,0,
+flux page,"largest |page table - states.csv| over 8,568 torque and flux-linkage entries",,4.999870901e-07,,ok,must hold,5e-07,,1,0,0,"the page stores 6 decimals, so up to 5e-7 is rounding"
+flux page,"mesh nodes of the 17 rotors: the page's, then the sweep's files",163288,163288,,identical,exact,,,1,0,0,"the reference design: 9,580 nodes"
+FEMM 5.0 on its own terms,"|T_age - T_wst| at the three loaded points of check_femm, coarse mesh [% of the torque]",,0.04393673111,,ok,must hold,0.1,,1,0,0,
+FEMM 5.0 on its own terms,"L_d < L_q: torque at (-6, 8) A above torque at (+6, 8) A, coarse mesh [N.m difference]",,0.516,,ok,must hold,0,,1,0,0,
+FEMM 5.0 on its own terms,"|T_age - T_wst| at the three loaded points of check_femm, fine mesh [% of the torque]",,0.02613695766,,ok,must hold,0.1,,1,0,0,
+FEMM 5.0 on its own terms,"L_d < L_q: torque at (-6, 8) A above torque at (+6, 8) A, fine mesh [N.m difference]",,0.5377,,ok,must hold,0,,1,0,0,
+FEMM 5.0 on its own terms,"T_age against T_wst over 1,172 solves: largest difference [% of the largest torque]",0.07704591612,0.04803154541,,ok,must hold,0.1,,1,0,0,1.40 mN.m at most
+FEMM 5.0 on its own terms,"... and as a % of the torque itself, where it is at least 30 % of the largest",0.1421859689,0.08163624927,,ok,must hold,0.1,,1,0,0,
+FEMM 5.0 on its own terms,"... and where it is between 10 % and 30 % of the largest (no limit: the two methods agree to about 1 mN.m, not to a share)",0.2342077445,0.2057141068,,info,info,,,1,0,0,
+FEMM 5.0 on its own terms,"L_d < L_q at 5, 10, 15 and 20 A, with and without the band: the smallest saliency Lq/Ld",,1.601371698,,ok,must hold,1,,1,0,0,
+FEMM 5.0 on its own terms,the slice against the full model: worst |flux linkage difference| at any rotor position [% of the full peak],1.145547346,1.126027051,,ok,must hold,1.145547346,,1,0,0,"the plan: within 1.1 % (FEMM 4.2: the README's 1.1 %), or better"
+FEMM 5.0 on its own terms,the slice against the full model: peak torque at 10 A [% difference],1.478749638,1.434293683,,ok,must hold,1.478749638,,1,0,0,"the plan: within 1.5 %, or better"
+FEMM 5.0 on its own terms,"flux linkages of exactly 0, plus read-back retries, in 3,518 solves",,0,,ok,must hold,0,,1,0,0,
+FEMM 5.0 on its own terms,logs of two complete runs that differ in more than their times (33 pairs),,0,,ok,must hold,0,,1,0,0,run_all.py keeps the last log of each step as NN-name.log.prev
+speed (seconds),"barrier_study (1,070 solves)",3515,129.2,-96.32432432,info,info,,-96.32432432,1,0,0,27.2 times faster
+speed (seconds),reference_open (102 solves),402,12.9,-96.79104478,info,info,,-96.79104478,1,0,0,31.2 times faster
+speed (seconds),validate_full (96 solves),1721,26.1,-98.48343986,info,info,,-98.48343986,1,0,0,65.9 times faster
+speed (seconds),"flux_explorer_sweep (2,040 solves)",742,118.5,-84.0296496,info,info,,-84.0296496,1,0,0,6.3 times faster
+speed (seconds),flux_explorer_sweep120 (306 solves),116,19.8,-82.93103448,info,info,,-82.93103448,1,0,0,5.9 times faster
+speed (seconds),optimize_demo,690,98,-85.79710145,info,info,,-85.79710145,1,0,0,7.0 times faster
+speed (seconds),worker_scaling (288 solves),223.7,33.1,-85.20339741,info,info,,-85.20339741,1,0,0,6.8 times faster
+speed (seconds),"the studies above, together",7409.7,437.6,-94.09422784,info,info,,-94.09422784,1,0,0,16.9 times faster
+speed (seconds),"the whole sweep of 33 steps (run_all.csv, FEMM 5.0; FEMM 4.2: about 2 h 13 min by the README's step times)",8000,518.8,-93.515,info,info,,-93.515,1,0,0,"FEMM 4.2: the README's step times added up, approximate"
+speed (seconds),FEMM programs left running after any step (run_all.csv),,0,,ok,must hold,0,,1,0,0,
+speed (seconds),steps that did not finish ok (run_all.csv),,0,,ok,must hold,0,,1,0,0,
