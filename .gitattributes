@@ -23,3 +23,6 @@
 *.dwg binary
 *.dxf -text
 *.DXF -text
+
+# The interactive page (docs/explorer): one generated file with its data embedded; stored byte for byte, never diffed.
+docs/explorer/*.html -text -diff
