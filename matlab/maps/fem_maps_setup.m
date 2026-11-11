@@ -1,8 +1,8 @@
 % fem_maps_setup.m: load the FEM maps of the optimized IPM-assisted synRM, scale them to a chosen winding, plot them, build the MTPA table and (optionally) fill Simscape's
 % FEM-Parameterized PMSM block.
 %
-% NOT RUN. This script is part of the MATLAB side of the flux maps, prepared by reading the maps' maths and MathWorks' documentation and checked only on the Python side
-% (optimization/maps_matlab.py writes fem_maps.mat and the numbers a MATLAB run must reproduce). No MATLAB runs yet: they come later, in a validation pass.
+% Validated in MATLAB R2025b on 2026-11-11 (sections 1-4; check_fem_maps.m passes all 14 checks). This script is part of the MATLAB side of the flux maps, prepared from the maps' maths and MathWorks' documentation and checked against the Python side
+% (optimization/maps_matlab.py writes fem_maps.mat and the numbers a MATLAB run must reproduce). Section 5, the Simulink block, is not run yet.
 % Run check_fem_maps.m first in that pass: it compares this chain's MTPA numbers with Python's.
 %
 % What the file holds (see optimization/maps_matlab.py for every variable): the flux linkages psi_d and psi_q [Wb], the torque [N.m], the 2-D block's Ld, Lq and PM, the 3-D block's

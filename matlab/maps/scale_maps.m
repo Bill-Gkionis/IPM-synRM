@@ -4,7 +4,7 @@ function M = scale_maps(M0, turns_per_coil_side, parallel_paths)
 %   M = scale_maps(M0, turns_per_coil_side, parallel_paths)
 %
 %   Written for the maps of the optimized IPM-assisted synRM (FEMM 5.0, fine mesh): fem_maps.mat, loaded into the struct M0 with S = load('fem_maps.mat').
-%   NOT RUN: the MATLAB side of the flux maps is prepared and checked by reading, not by running (the MATLAB runs come later, in a validation pass).
+%   Validated in MATLAB R2025b on 2026-11-11: check_fem_maps.m passes all 14 checks against the Python side (the MTPA angles to 0 deg, the torques to 2e-16, the scaling rule exactly).
 %
 %   WHAT IT DOES, AND WHY
 %   FEMM multiplies the current of a winding block by its turns, so the magnetic field depends on the AMPERE-TURNS only. The maps were solved for the placeholder winding: 10

@@ -3,7 +3,7 @@ function result = fill_fem_pmsm_block(block, M, varargin)
 %
 %   result = fill_fem_pmsm_block(block, M, 'Option', '3d', 'Rs', 0.05, ...)
 %
-%   Written for the maps of the optimized IPM-assisted synRM (fem_maps.mat, rescaled with scale_maps for the chosen winding). NOT RUN (see scale_maps.m): the MATLAB side of the flux maps
+%   Written for the maps of the optimized IPM-assisted synRM (fem_maps.mat, rescaled with scale_maps for the chosen winding). NOT RUN YET (it needs a Simulink model with the block; the other scripts were validated in MATLAB R2025b on 2026-11-11): the MATLAB side of the flux maps
 %   is prepared and checked by reading. CHECK BEFORE CITING: everything below about the block comes from MathWorks' documentation page of the block
 %   (https://www.mathworks.com/help/sps/ref/femparameterizedpmsm.html, read 2026-11-09), which prints the DIALOG names of the parameters and NO programmatic names.
 %

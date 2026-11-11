@@ -204,7 +204,7 @@ The liquid jacket's current is held at the flux maps' edge (158 A for this windi
 ## 10. What the numbers rest on, and what they leave out
 
 **The chain:**
-1. **Flux maps** of the optimized cross-section: ψ_d and ψ_q over the current plane, up to 3 × the rated current and into field weakening. That's 425 operating points, each averaged over the rotor positions of a ripple period, solved on FEMM 5.0's fine mesh, with cross-saturation included. The d-q torque from the maps matches FEMM's own torque to 0.085 %. *Their tables, with scripts for Simscape's FEM-Parameterized PMSM block, are in [`matlab/maps/`](matlab/maps/) (prepared, not yet run in MATLAB).*
+1. **Flux maps** of the optimized cross-section: ψ_d and ψ_q over the current plane, up to 3 × the rated current and into field weakening. That's 425 operating points, each averaged over the rotor positions of a ripple period, solved on FEMM 5.0's fine mesh, with cross-saturation included. The d-q torque from the maps matches FEMM's own torque to 0.085 %. *Their tables, with scripts for Simscape's FEM-Parameterized PMSM block, are in [`matlab/maps/`](matlab/maps/), validated in MATLAB (2026-11-11). The Simulink block is the next step.*
 2. **The limits.** The winding scales the maps (ψ ∝ turns, the current ∝ 1/turns, everything ∝ the stack length). Then come the current limit and the voltage limit, and MTPA, field weakening and MTPV, solved at every speed.
 3. **The losses:**
    - the copper: DC with the end turns, plus skin, proximity, PWM ripple and circulating currents;

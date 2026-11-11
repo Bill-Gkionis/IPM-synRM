@@ -4,7 +4,7 @@ function ok = check_fem_maps(mat_file)
 %   ok = check_fem_maps()             uses fem_maps.mat next to this file
 %   ok = check_fem_maps(mat_file)
 %
-%   NOT RUN (see scale_maps.m): it exists for the later validation pass. It runs scale_maps and build_mtpa_table on the maps, then compares with the numbers
+%   Run in MATLAB R2025b on 2026-11-11: all 14 checks pass. It runs scale_maps and build_mtpa_table on the maps, then compares with the numbers
 %   optimization/maps_matlab.py stored in the same file (expected_*, made in Python with the same linear interpolation and the same 0.1 degree walk):
 %     1. the placeholder winding: the MTPA angle and torque at 1, 2 and 3 times the rated current (angle within 1e-6 degrees, torque within 1e-9 relative);
 %     2. a 20-turn winding in one path (scale 2): the same angles and torques at half the currents (expected20_*);

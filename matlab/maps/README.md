@@ -2,9 +2,14 @@
 
 The optimized motor's flux maps, ψ_d and ψ_q over the whole current plane with cross-saturation included. They come in the form Simscape Electrical's **FEM-Parameterized PMSM** block takes, with scripts that scale them to a winding, build the MTPA table and fill the block.
 
-> **Not run in MATLAB yet.**
-> - The files were prepared from the maps' maths and MathWorks' documentation, and checked on the Python side by reading `fem_maps.mat` back.
-> - The first MATLAB run is the validation pass. Start it with `check_fem_maps.m`.
+> **Validated in MATLAB R2025b (2026-11-11).**
+> - **`check_fem_maps.m` passes all 14 checks against the Python reference:**
+>   - the MTPA angles to 0° and the torques to 2 × 10⁻¹⁶;
+>   - the winding-scaling rule exactly;
+>   - the 2-D and 3-D block tables to rounding.
+> - **`fem_maps_setup.m` runs** (sections 1–4) and reproduces 23.30°, 37.40° and 43.20° at 1, 2 and 3 × rated.
+> - **On the 60 mm motor's own winding** (9 turns, 4 paths), MATLAB's chain and Python's flux maps agree within 0.2° and 0.02 %. At 42 A, both give 19.2° and 4.279 N·m. At 84 A, they give 33.3° against 33.1°, and 8.775 against 8.776 N·m.
+> - **Not run yet:** filling the Simulink block (`fill_fem_pmsm_block.m`, section 5 of the setup script). It needs a model with a FEM-Parameterized PMSM block, and it's the next step.
 > - The Python that wrote them is [`python/optimization/maps_matlab.py`](../../python/optimization/maps_matlab.py), named in the scripts' comments; the maps themselves come from [`maps_run.py`](../../python/optimization/maps_run.py) and [`maps_femm.py`](../../python/optimization/maps_femm.py).
 
 ## What the maps are

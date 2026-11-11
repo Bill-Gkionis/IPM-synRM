@@ -409,7 +409,7 @@ The first winding study (`optimization/winding.py`) priced the winding's AC loss
 
 ### 10. The thermal network, the flux maps and the motor map
 
-The four parts below are written up in the repository's [README](../README.md) (steps 8, 9 and 11) and in [Motor map.md](../Motor%20map.md); the flux maps' MATLAB tables and scripts are in [`matlab/maps/`](../matlab/maps/), prepared and not yet run in MATLAB.
+The four parts below are written up in the repository's [README](../README.md) (steps 8, 9 and 11) and in [Motor map.md](../Motor%20map.md); the flux maps' MATLAB tables and scripts are in [`matlab/maps/`](../matlab/maps/), validated in MATLAB R2025b (2026-11-11); the Simulink block is the next step.
 
 #### Thermal network
 

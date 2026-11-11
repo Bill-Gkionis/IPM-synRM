@@ -10,12 +10,12 @@ A **36-slot, 8-pole permanent-magnet-assisted synchronous reluctance motor** (PM
 > - **Done, and published here:**
 >   - the cross-section, optimized;
 >   - its rotor, checked for stress at speed;
->   - its flux maps over the whole current plane, with cross-saturation and the iron loss;
+>   - its flux maps over the whole current plane, with cross-saturation and the iron loss, validated in MATLAB;
 >   - its thermal model;
 >   - its copper losses, with the proximity effect, and the winding trade-offs;
 >   - its torque–speed, loss and efficiency estimates ([Motor map.md](Motor%20map.md));
 >   - an interactive flux page of the three designs ([open it](https://bill-gkionis.github.io/IPM-synRM/explorer/)).
-> - **Next:** the MATLAB validation of the flux maps, then a flux-map-driven Simulink plant.
+> - **Next:** a flux-map-driven Simulink plant, in place of the constant parameters.
 > - **Not yet measured:** every number here is a finite-element estimate. Nothing has been measured on hardware yet.
 
 ## The interactive flux page
@@ -28,7 +28,7 @@ A **36-slot, 8-pole permanent-magnet-assisted synchronous reluctance motor** (PM
 - the phase currents and their vectors;
 - the torque ripple;
 - the current plane, with field weakening as the speed rises;
-- the 3,400 designs the optimizer scored.
+- about 3,400 of the designs the optimizer scored: the optimization runs (the 736 sweep designs aren't plotted).
 
 One self-contained page, running in the browser. Pictures between solved points are blended, and the page says so.
 
@@ -48,7 +48,7 @@ One self-contained page, running in the browser. Pictures between solved points 
 
 **What it can do, estimated** ([Motor map.md](Motor%20map.md) has every assumption). On a 60 mm stack and a 48 V bus, with a fan on the shaft:
 - **4.2 N·m continuously** at 3,000 rpm, and **8.7 N·m** for about 25 minutes from a cold start;
-- **2.97 kW peak** short-term, and still 2.7 kW at 16,330 rpm, the rotor's safe speed;
+- **2.97 kW peak** short-term, and still 2.7 kW at 16,330 rpm, where the speed range ends: the rotor's safe speed, on placeholder strength values;
 - **a best efficiency of 95.2 %** (motor only).
 
 These are 2D finite-element estimates, not measurements.
@@ -71,13 +71,20 @@ flowchart LR
 - **One heavy run at a time.** Every solver run (FEMM, CalculiX, Elmer, MATLAB) takes a slot from a queue, runs at below-normal priority under a timeout, and ends only the processes it started.
 - **Every result is checked by a second route:** a known analytic answer, a different solver, or an independent optimizer that never saw the first one's results.
 
+**Solves so far:** about 122,500 FEMM solves:
+- 95,588 for the optimization search (step 6);
+- 15,202 for the flux maps (step 8);
+- 11,718 for the interactive page.
+
+That's besides the studies and the validation runs.
+
 The code is in [`python/`](python/), with a guide to every file in [`python/README.md`](python/README.md).
 
 ## How it got here
 
 ### 1. The first pass (February–April 2026)
 
-SolidWorks parts, a FEMM model with a rotor sweep by hand from 5° to 90°, the flux linkage extracted in MATLAB, and a first field-oriented-control plant in Simulink. The plant ran unloaded, with constant motor parameters.
+SolidWorks parts, a FEMM model with a rotor sweep by hand from 5° to 90°, the flux linkage extracted in MATLAB, and a first field-oriented-control (FOC) drive with space-vector PWM, in Simulink and Simscape Electrical. The plant ran unloaded, with constant motor parameters.
 - **Files:** [`cad/`](cad/), [`femm/`](femm/), [`matlab/`](matlab/), and screenshots in [`docs/figures/`](docs/figures/).
 
 ### 2. A scriptable stack (October 2026)
@@ -130,7 +137,12 @@ The first-pass rotor had a 1.5 mm air band behind the magnets. Filled with steel
 On the band-free rotor:
 - **Torque in the d-q frame.** At 10 A the torque splits into three field-times-current terms: 0.918 + 0.461 − 0.253 = 1.127 N·m.
 - **The magnets make the saliency.** With their coercivity set to zero, the unsaturated bridges short the barrier and L_d = L_q (saliency 1.00, against 1.82 with the magnets).
-- **MTPA, the most torque per amp.** The best current angle climbs from 22.9° at 10 A to 43.3° at 40 A, above the constant-parameter formula's 37.5°. Fed each current's own inductances, the formula even turns the wrong way, because of **cross-saturation**. So the controller's table has to come from flux maps.
+- **MTPA, the most torque per amp,** on this starting rotor (rated 10 A at the 10-turn placeholder winding), from 5 to 40 A:
+  - FEMM's best current angle climbs from 22.9° at 10 A to 43.3° at 40 A;
+  - the textbook formula with the 10 A point's constant L_d, L_q and ψ_PM says 37.5° at 40 A;
+  - fed each current's own axis inductances instead, it even turns the wrong way, to 25°. Run at that angle, the motor loses about 10 % of its torque.
+
+  The cause is **cross-saturation**, so the controller's table has to come from flux maps.
 
 ![Torque against current angle](docs/figures/physics/torque-vs-current-angle.png)
 
@@ -145,7 +157,7 @@ On the band-free rotor:
 ### 6. The optimization (November 2026)
 
 **The landscape came first:** sweeps of each dimension, two maps, and a Morris screening. Then each part got the optimizer its landscape called for:
-- **NSGA-II for the rotor,** a full grid for the stator, NSGA-II for both together, and every combination for the winding;
+- **NSGA-II (pymoo) for the rotor,** a full grid for the stator, NSGA-II for both together, and every combination for the winding;
 - **a blind second run** with a different method (a Bayesian search on Gaussian-process surrogates) found the same design region, with a slightly better front in fewer designs. The chosen design comes from its front.
 
 **The size of the search:** 4,156 designs, each scored with 23 FEMM solves, about 96,000 solves in all:
@@ -159,6 +171,7 @@ On the band-free rotor:
 |---|---|---|
 | Mean torque | 1.129 N·m | **1.807 N·m (+60 %)** |
 | Torque ripple | 18.45 % | **4.84 %** |
+| Power factor (resistance neglected) | 0.810 | 0.868 |
 | Magnet flux linkage | 16.64 mWb | 24.20 mWb (+45 %, the same magnets) |
 
 **Why:**
@@ -209,11 +222,20 @@ The optimization scored one operating point. A drive needs the whole current pla
 - **The checks:**
   - the d-q torque 1.5 p (ψ_d i_q − ψ_q i_d), fed from the maps, matches FEMM's own torque to **0.085 %** at worst;
   - the two cross inductances agree, as reciprocity says they must (median difference 0.015 %).
-- **Cross-saturation is strong.** The best current angle (MTPA) is 23.5°, 37.4° and **43.3°** at 1, 2 and 3 × rated. A constant-parameter formula says 17.3°, 26.2° and **30.9°**, and at 3 × rated it puts the torque **41 % too high**. So the controller's MTPA table and the Simulink plant both come from the maps.
+- **Cross-saturation is strong.** On the optimized rotor, rated at 11.86 A at the placeholder winding (so 3 × rated is 35.6 A):
+  - the best current angle (MTPA) is 23.5°, 37.4° and **43.3°** at 1, 2 and 3 × rated;
+  - the formula with the rated point's constant L_d, L_q and ψ_PM says 17.3°, 26.2° and **30.9°**. Its angle still rises with current, because magnet torque grows as I and reluctance torque as I², but too little;
+  - run at that angle, the motor loses only 3.6 % of its torque at 3 × rated, because the curve is flat near its top;
+  - the constant-parameter **model's own torque prediction** there is **41 % too high**: a plant built on it would promise torque the motor can't make.
+
+  So the controller's MTPA table and the Simulink plant both come from the maps. *(The 43.3° here and in step 5 are two rotors at two currents.)*
 - **The iron loss:**
   - **The model:** a Bertotti model fitted to M-19 data (rms **6.9 %** cross-validated), applied to every harmonic of each mesh triangle's flux-density waveform over a full electrical period.
   - **The result:** 9.0 W at the rated point at 3,000 rpm, and 129 W at 16,330 rpm (a 20 mm stack, 0.3 mm laminations).
-- **For MATLAB and Simulink:** the maps, with five scripts for Simscape's FEM-Parameterized PMSM block, are in [`matlab/maps/`](matlab/maps/). They are prepared, and not yet run in MATLAB.
+- **For MATLAB and Simulink:** the maps, with five scripts for Simscape's FEM-Parameterized PMSM block, are in [`matlab/maps/`](matlab/maps/).
+  - **Validated in MATLAB R2025b:** `check_fem_maps.m` passes all 14 checks against the Python reference, with the MTPA angles to 0° and the torques to 2 × 10⁻¹⁶.
+  - **On the 60 mm motor's own winding,** MATLAB and Python agree within 0.2° and 0.02 %.
+  - **Next:** filling the Simulink block.
 
 ![Cross-saturation: ψ_d against i_d at four values of i_q, and the two cross inductances](docs/figures/maps/cross-saturation.png)
 
@@ -305,7 +327,7 @@ The flux maps, the losses and the thermal network combine into what the motor ca
 **On a 60 mm stack and a 48 V bus,** with the smallest of the three shaft fans studied (50 W at the top speed):
 - **4.2 N·m continuously** at 3,000 rpm (1.32 kW);
 - **8.7 N·m short-term,** up to 2,718 rpm, for about 25 minutes from a cold start;
-- **2.97 kW peak,** and still 2.72 kW at 16,330 rpm. The short-term current equals the motor's characteristic current (84 A), so the power stays nearly flat to the top speed;
+- **2.97 kW peak,** and still 2.72 kW at 16,330 rpm, the end of the speed range (the rotor's safe speed, on placeholder strength values). The short-term current equals the motor's characteristic current (84 A), so the power stays nearly flat to the top speed;
 - **a best efficiency of 95.2 %** (motor only), at 3,746 rpm and 2.9 N·m.
 
 **How it's solved and checked:**
@@ -334,7 +356,7 @@ The flux maps, the losses and the thermal network combine into what the motor ca
 
 ### 12. Next
 
-- **The MATLAB validation** of the flux maps: the scripts in [`matlab/maps/`](matlab/maps/) are prepared and not yet run in MATLAB. Then a **flux-map-driven Simulink plant** in place of the constant parameters.
+- **A flux-map-driven Simulink plant:** the validated maps in [`matlab/maps/`](matlab/maps/) go into Simscape's FEM-Parameterized PMSM block, in place of the constant parameters, driven by the FOC loop.
 - **Then:**
   - the magnets' demagnetisation and their eddy losses;
   - the rotor in 3D;
@@ -345,7 +367,7 @@ The flux maps, the losses and the thermal network combine into what the motor ca
 
 | Item | Status |
 |---|---|
-| Core saturation and cross-saturation | ✅ published (step 8, the flux maps); the MATLAB tables prepared, not yet run |
+| Core saturation and cross-saturation | ✅ published (step 8, the flux maps); validated in MATLAB; the Simulink plant next |
 | Higher field harmonics | 🟡 measured (air-gap spectrum, back-EMF, ripple); not yet in a plant |
 | Hysteresis and iron loss | ✅ published (step 8: Bertotti, per mesh element) |
 | Proximity and other AC copper losses | ✅ published (step 10) |
@@ -358,7 +380,7 @@ The flux maps, the losses and the thermal network combine into what the motor ca
 |---|---|
 | [`python/`](python/) | The pipeline's code: geometry, FEMM driver, solver queue, studies, optimization, checks and tests ([guide](python/README.md)) |
 | [Motor map.md](Motor%20map.md) | What the optimized motor can do: torque, power, losses and efficiency against speed, with every assumption |
-| [`matlab/maps/`](matlab/maps/) | The flux maps for Simscape's FEM-Parameterized PMSM block, and the scripts that use them (prepared, not yet run in MATLAB) |
+| [`matlab/maps/`](matlab/maps/) | The flux maps for Simscape's FEM-Parameterized PMSM block, and the scripts that use them (validated in MATLAB; the Simulink block not yet built) |
 | [`docs/figures/`](docs/figures/) | The figures of each step |
 | [`docs/explorer/`](docs/explorer/) | The interactive flux page, served by GitHub Pages ([open it](https://bill-gkionis.github.io/IPM-synRM/explorer/)) |
 | [`femm/`](femm/) | The first-pass FEMM model and its rotor-sweep screenshots |

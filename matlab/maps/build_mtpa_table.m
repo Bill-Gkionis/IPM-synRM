@@ -3,7 +3,7 @@ function tbl = build_mtpa_table(M, I_vec, step_deg)
 %
 %   tbl = build_mtpa_table(M, I_vec, step_deg)
 %
-%   Written for the maps of the optimized IPM-assisted synRM (fem_maps.mat, possibly rescaled by scale_maps). NOT RUN (see scale_maps.m).
+%   Written for the maps of the optimized IPM-assisted synRM (fem_maps.mat, possibly rescaled by scale_maps). Validated in MATLAB R2025b on 2026-11-11 (check_fem_maps.m: every check passes).
 %
 %   WHAT IT DOES, AND WHY
 %   A controller is asked for a torque and has to turn it into the current pair (i_d*, i_q*) that makes it with the least current: MTPA, maximum torque per ampere. With the flux
