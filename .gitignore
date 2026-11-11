@@ -16,3 +16,12 @@ __pycache__/
 .pytest_cache/
 
 # Not *.fem: on Windows that pattern would also hide femm/*.FEM
+
+# Local, secret and editor files that never belong in the repository (2026-11-11)
+.env
+*.log
+*.pkl
+~$*
+.vscode/
+.idea/
+Thumbs.db
